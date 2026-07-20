@@ -6,13 +6,10 @@ import { EyeIcon, EyeOffIcon, GithubIcon, GoogleIcon } from "@/components/common
 function LoginForm() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const formData = new FormData(event.currentTarget);
-        const email = String(formData.get("email") ?? "");
 
-        window.alert(`Login submitted for ${email}`);
     };
 
     const handleSocialLogin = (provider: "GitHub" | "Google") => {
@@ -44,7 +41,7 @@ function LoginForm() {
                 rightIcon={
                     <button
                         type="button"
-                        onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                        onClick={() => { setIsPasswordVisible(!isPasswordVisible); }}
                         className="text-text-secondary hover:text-text-main transition-colors cursor-pointer flex items-center justify-center border-none bg-transparent focus:outline-none"
                         aria-label={isPasswordVisible ? "Hide password" : "Show password"}
                     >
@@ -80,7 +77,7 @@ function LoginForm() {
                 {/* GitHub */}
                 <Button
                     variant="primary"
-                    onClick={() => handleSocialLogin("GitHub")}
+                    onClick={() => { handleSocialLogin("GitHub"); }}
                     leftIcon={<GithubIcon className="text-white w-5 h-5" />}
                     className="bg-[#24292f] hover:bg-[#1c2026] active:bg-[#14181c] text-white text-xs font-semibold leading-4 tracking-[0.6px] border"
                 >
@@ -90,7 +87,7 @@ function LoginForm() {
                 {/* Google */}
                 <Button
                     variant="outlined"
-                    onClick={() => handleSocialLogin("Google")}
+                    onClick={() => { handleSocialLogin("Google"); }}
                     leftIcon={<GoogleIcon className="w-5 h-5" />}
                     className="bg-white hover:bg-gray-50 active:bg-gray-100 border border-gray-300 text-text-placeholder text-xs font-semibold leading-4 tracking-[0.6px]"
                 >

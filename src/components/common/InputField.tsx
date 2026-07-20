@@ -30,7 +30,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         ref
     ) => {
         const generatedId = useId();
-        const inputId = id || generatedId;
+        const inputId = id ?? generatedId;
         const errorId = `${inputId}-error`;
 
         return (

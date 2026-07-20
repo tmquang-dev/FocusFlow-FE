@@ -4,8 +4,14 @@ import { RouterProvider } from 'react-router'
 import { route } from './router'
 import './index.css'
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <RouterProvider router={route} />
-  </StrictMode >,
-)
+const rootElement = document.getElementById('root')
+
+if (rootElement) {
+  createRoot(rootElement).render(
+    <StrictMode>
+      <RouterProvider router={route} />
+    </StrictMode>
+  )
+} else {
+  console.error("Root element not found in DOM.")
+}

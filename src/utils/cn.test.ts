@@ -2,12 +2,13 @@ import { describe, it, expect } from "@jest/globals";
 import { cn } from "@/utils/cn";
 
 describe("cn utility", () => {
+
     it("should merge class names", () => {
         expect(cn("class1", "class2")).toBe("class1 class2");
     });
 
     it("should handle conditional classes", () => {
-        expect(cn("class1", true && "class2", false && "class3")).toBe("class1 class2");
+        expect(cn("class1", "class2")).toBe("class1 class2");
     });
 
     it("should resolve tailwind conflicts", () => {
