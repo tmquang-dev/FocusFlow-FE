@@ -18,7 +18,7 @@
 
   /* Background Colors */
   --color-background-secondary-50: #EDF1F5;
-  --color-background-main: #EFF6FF;
+  --color-background-main: #e5e9f0;
   --color-background-secondary-0: #FFFFFF;
   --color-background-app: #EFF6FF;
 
@@ -159,10 +159,10 @@
   }
 
   .font-text-logo {
-    @apply font-inter text-3xl font-bold leading-9 tracking-tight;
+    @apply font-inter text-2xl font-bold leading-8 tracking-tight;
   }
 
-  .font-text-medium {
+  .font-text-medium-20 {
     @apply font-inter text-sm font-normal leading-5;
   }
 
