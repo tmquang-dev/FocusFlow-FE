@@ -1,43 +1,47 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@/components/common/Button";
 import InputField from "@/components/common/InputField";
 import { EyeIcon, EyeOffIcon, GithubIcon, GoogleIcon } from "@/components/common/Icons";
+import { loginSchema, type LoginSchema } from "./LoginForm.shema";
 
 function LoginForm() {
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginSchema>({
+        resolver: zodResolver(loginSchema),
+        mode: 'onBlur'
+    });
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
-
+    const onSubmit = (data: LoginSchema) => {
+        console.log(data);
     };
 
     const handleSocialLogin = (provider: "GitHub" | "Google") => {
         window.alert(`Continue with ${provider} selected`);
     };
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3 items-center w-full">
-
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 items-center w-full">
             {/* Email field */}
             <InputField
                 label="Email"
                 id="input-1"
-                name="email"
                 placeholder="name@example.com"
                 type="email"
                 autoComplete="email"
-                required
+                error={errors.email?.message}
+                {...register("email")}
             />
 
             {/* Password field */}
             <InputField
                 label="Password"
                 id="input-2"
-                name="password"
                 placeholder="••••••••"
                 type={isPasswordVisible ? "text" : "password"}
                 autoComplete="current-password"
-                required
+                error={errors.password?.message}
+                {...register("password")}
                 rightIcon={
                     <button
                         type="button"
