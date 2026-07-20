@@ -72,7 +72,7 @@ function LoginForm() {
             {/* Separator */}
             <div className="flex items-center w-full gap-0 py-2.5">
                 <div className="flex-1 h-px bg-border" />
-                <span className="px-3 text-xs leading-[16px] text-text-placeholder">Or</span>
+                <span className="px-3 text-xs leading-4 text-text-placeholder">Or</span>
                 <div className="flex-1 h-px bg-border" />
             </div>
 
