@@ -136,7 +136,7 @@ describe("LoginForm Component", () => {
         await user.click(screen.getByRole("button", { name: /log in/i }));
 
         await waitFor(() => {
-            expect(localStorage.getItem("token")).toBe("mock-token");
+            expect(localStorage.getItem("focusFlowToken")).toBe("mock-token");
         });
     });
 

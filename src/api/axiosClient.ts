@@ -16,7 +16,7 @@ const axiosClient = axios.create({
 // 2. REQUEST INTERCEPTOR: Tự động đính kèm Token từ localStorage trước khi gửi request
 axiosClient.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('focusFlowToken');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { useNavigate } from "react-router";
 import Button from "@/components/common/Button";
 import InputField from "@/components/common/InputField";
 import { EyeIcon, EyeOffIcon, GithubIcon, GoogleIcon } from "@/components/common/Icons";
@@ -12,10 +13,11 @@ import { type IApiLoginError } from "@/api/services/authServices.type";
 import AlertMessage from "@/components/common/AlertMessage";
 
 function LoginForm() {
+    const navigate = useNavigate();
     const [responseMessage, setResponseMessage] = useState<IResponseLogin | null>(null);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<LoginSchema>({
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema),
         mode: 'onBlur'
     });
@@ -23,7 +25,13 @@ function LoginForm() {
     const onSubmit = async (data: LoginSchema) => {
         try {
             const res = await authServices.login(data);
-            setResponseMessage({ message: "Login success", type: res.status });
+            if (res.status === "success") {
+                localStorage.setItem("focusFlowToken", res.data.access_token);
+            }
+            setResponseMessage({ message: "Login success, redirecting to home...", type: res.status });
+            setTimeout(() => {
+                navigate("/")
+            }, 1500)
         } catch (error) {
             if (axios.isAxiosError<IApiLoginError>(error)) {
                 const responseData = error.response?.data;
@@ -83,7 +91,7 @@ function LoginForm() {
             />
 
             {/* Submit button */}
-            <Button variant="primary" type="submit" className="w-full">
+            <Button variant="primary" type="submit" className="w-full" isloading={isSubmitting}>
                 Log In
             </Button>
 
