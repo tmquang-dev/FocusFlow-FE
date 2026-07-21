@@ -1,8 +1,27 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import LoginForm from "./LoginForm";
 import { describe, it, expect, jest, beforeEach, afterEach } from "@jest/globals";
 import "@testing-library/jest-dom/jest-globals";
+
+jest.unstable_mockModule("@/api/services/authServices", () => ({
+    authServices: {
+        login: jest.fn((payload: any) => Promise.resolve({
+            status: "success",
+            data: {
+                access_token: "mock-token",
+                user: {
+                    id: "6a574acdd4dc04b4afa1e9fa",
+                    email: payload.email,
+                    full_name: "Developer Test"
+                }
+            }
+        })),
+        logout: jest.fn(() => Promise.resolve()),
+    }
+}));
+
+const { default: LoginForm } = await import("./LoginForm");
+
 
 // Mocking window.alert
 const originalAlert = window.alert;
@@ -117,10 +136,7 @@ describe("LoginForm Component", () => {
         await user.click(screen.getByRole("button", { name: /log in/i }));
 
         await waitFor(() => {
-            expect(console.log).toHaveBeenCalledWith({
-                email: "user@example.com",
-                password: "password123"
-            });
+            expect(localStorage.getItem("token")).toBe("mock-token");
         });
     });
 

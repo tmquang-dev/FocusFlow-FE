@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // 1. CẤU HÌNH KHỞI TẠO INSTANCE
-const baseURL = import.meta.env.VITE_API_URL;
+const baseURL = import.meta.env?.VITE_API_URL || '';
 
 const axiosClient = axios.create({
     baseURL,
@@ -27,25 +27,6 @@ axiosClient.interceptors.request.use(
     }
 );
 
-interface FailedRequest {
-    resolve: (token: string | null) => void;
-    reject: (error: any) => void;
-}
-
-let isRefreshing = false;
-let failedQueue: FailedRequest[] = [];
-
-const processQueue = (error: any, token: string | null = null) => {
-    failedQueue.forEach((prom) => {
-        if (error) {
-            prom.reject(error);
-        } else {
-            prom.resolve(token);
-        }
-    });
-    failedQueue = [];
-};
-
 // 3 & 4. RESPONSE INTERCEPTOR & XỬ LÝ LỖI TẬP TRUNG
 axiosClient.interceptors.response.use(
     (response) => {
@@ -53,78 +34,22 @@ axiosClient.interceptors.response.use(
         return response.data;
     },
     async (error) => {
-        const originalRequest = error.config;
-
         // Xử lý các mã lỗi HTTP trả về từ Server
         if (error.response) {
             const status = error.response.status;
 
             switch (status) {
                 case 401:
-                    // Nếu đây là request refresh token bị lỗi 401, hoặc request đã thử lại một lần trước đó
-                    if (
-                        originalRequest._retry ||
-                        originalRequest.url === '/auth/refresh-token'
-                    ) {
-                        localStorage.removeItem('token');
+                    localStorage.removeItem('token');
 
-                        const isPublicRoute =
-                            window.location.pathname === '/login' ||
-                            window.location.pathname === '/register' ||
-                            window.location.pathname === '/';
-                        if (!isPublicRoute) {
-                            window.location.href = '/login';
-                        }
-                        return Promise.reject(error);
+                    const isPublicRoute =
+                        window.location.pathname === '/login' ||
+                        window.location.pathname === '/register' ||
+                        window.location.pathname === '/';
+                    if (!isPublicRoute) {
+                        window.location.href = '/login';
                     }
-
-                    if (isRefreshing) {
-                        return new Promise<string | null>((resolve, reject) => {
-                            failedQueue.push({ resolve, reject });
-                        })
-                            .then((token) => {
-                                originalRequest.headers.Authorization = `Bearer ${token}`;
-                                return axiosClient(originalRequest);
-                            })
-                            .catch((err) => {
-                                return Promise.reject(err);
-                            });
-                    }
-
-                    originalRequest._retry = true;
-                    isRefreshing = true;
-
-                    return new Promise((resolve, reject) => {
-                        axiosClient
-                            .post('/auth/refresh-token', {}, { withCredentials: true })
-                            .then((response: any) => {
-                                const newAccessToken = response.accessToken;
-                                localStorage.setItem('token', newAccessToken);
-
-                                axiosClient.defaults.headers.common['Authorization'] =
-                                    `Bearer ${newAccessToken}`;
-                                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-
-                                processQueue(null, newAccessToken);
-                                resolve(axiosClient(originalRequest));
-                            })
-                            .catch((err) => {
-                                processQueue(err, null);
-                                localStorage.removeItem('token');
-                                const isPublicRoute =
-                                    window.location.pathname === '/login' ||
-                                    window.location.pathname === '/register' ||
-                                    window.location.pathname === '/';
-                                if (!isPublicRoute) {
-                                    window.location.href = '/login';
-                                }
-                                reject(err);
-                            })
-                            .finally(() => {
-                                isRefreshing = false;
-                            });
-                    });
-
+                    break;
                 case 403:
                     console.error('Bạn không có quyền truy cập vào tài nguyên này.');
                     break;
@@ -150,3 +75,4 @@ axiosClient.interceptors.response.use(
 );
 
 export default axiosClient;
+

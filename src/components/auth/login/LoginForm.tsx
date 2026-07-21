@@ -5,16 +5,28 @@ import Button from "@/components/common/Button";
 import InputField from "@/components/common/InputField";
 import { EyeIcon, EyeOffIcon, GithubIcon, GoogleIcon } from "@/components/common/Icons";
 import { loginSchema, type LoginSchema } from "./LoginForm.shema";
+import type { IResponseLogin } from "./LoginForm.type";
+import { authServices } from "@/api/services/authServices";
+import AlertMessage from "@/components/common/AlertMessage";
 
 function LoginForm() {
+    const [responseMessage, setResponseMessage] = useState<IResponseLogin | null>(null);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
     const { register, handleSubmit, formState: { errors } } = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema),
         mode: 'onBlur'
     });
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    const onSubmit = (data: LoginSchema) => {
-        console.log(data);
+    const onSubmit = async (data: LoginSchema) => {
+        try {
+            const res = await authServices.login(data) as any;
+            setResponseMessage({ message: "Login success", type: res.status });
+        } catch (error) {
+            const responseData = error.response?.data;
+            const message = responseData?.message || "An unknown error occurred";
+            setResponseMessage({ message, type: responseData?.status });
+        }
     };
 
     const handleSocialLogin = (provider: "GitHub" | "Google") => {
@@ -22,6 +34,12 @@ function LoginForm() {
     };
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 items-center w-full">
+            {responseMessage && (
+                <AlertMessage
+                    description={responseMessage.message}
+                    type={responseMessage.type}
+                />
+            )}
             {/* Email field */}
             <InputField
                 label="Email"
