@@ -28,22 +28,20 @@ function LoginForm() {
     const onSubmit = async (data: LoginSchema) => {
         try {
             const res = await authServices.login(data);
-            if (res.status === "success") {
-                localStorage.setItem("focusFlowToken", res.data.access_token);
-                dispatch(setUser(res.data.user));
-            }
+            localStorage.setItem("focusFlowToken", res.data.access_token);
+            dispatch(setUser(res.data.user));
             setResponseMessage({ message: "Login success, redirecting to home...", type: res.status });
             setTimeout(() => {
-                navigate("/")
-            }, 1500)
+                void navigate("/");
+            }, 1500);
         } catch (error) {
             if (axios.isAxiosError<IApiLoginError>(error)) {
                 const responseData = error.response?.data;
-                const message = responseData?.message || "An unknown error occurred";
-                const status = responseData?.status || "error";
+                const message = responseData?.message ?? "An unknown error occurred";
+                const status = responseData?.status ?? "error";
                 setResponseMessage({
                     message,
-                    type: (status === "warning" || status === "error") ? status : "error"
+                    type: status
                 });
             } else {
                 setResponseMessage({ message: "An unexpected error occurred", type: "error" });
@@ -55,7 +53,7 @@ function LoginForm() {
         window.alert(`Continue with ${provider} selected`);
     };
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 items-center w-full">
+        <form onSubmit={(e) => { void handleSubmit(onSubmit)(e); }} className="flex flex-col gap-3 items-center w-full">
             {responseMessage && (
                 <AlertMessage
                     description={responseMessage.message}
