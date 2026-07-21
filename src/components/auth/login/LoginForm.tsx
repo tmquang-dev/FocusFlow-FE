@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import Button from "@/components/common/Button";
 import InputField from "@/components/common/InputField";
 import { EyeIcon, EyeOffIcon, GithubIcon, GoogleIcon } from "@/components/common/Icons";
 import { loginSchema, type LoginSchema } from "./LoginForm.shema";
 import type { IResponseLogin } from "./LoginForm.type";
 import { authServices } from "@/api/services/authServices";
+import { type IApiLoginError } from "@/api/services/authServices.type";
 import AlertMessage from "@/components/common/AlertMessage";
 
 function LoginForm() {
@@ -20,12 +22,20 @@ function LoginForm() {
 
     const onSubmit = async (data: LoginSchema) => {
         try {
-            const res = await authServices.login(data) as any;
+            const res = await authServices.login(data);
             setResponseMessage({ message: "Login success", type: res.status });
         } catch (error) {
-            const responseData = error.response?.data;
-            const message = responseData?.message || "An unknown error occurred";
-            setResponseMessage({ message, type: responseData?.status });
+            if (axios.isAxiosError<IApiLoginError>(error)) {
+                const responseData = error.response?.data;
+                const message = responseData?.message || "An unknown error occurred";
+                const status = responseData?.status || "error";
+                setResponseMessage({
+                    message,
+                    type: (status === "warning" || status === "error") ? status : "error"
+                });
+            } else {
+                setResponseMessage({ message: "An unexpected error occurred", type: "error" });
+            }
         }
     };
 
