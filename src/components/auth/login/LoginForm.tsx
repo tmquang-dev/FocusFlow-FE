@@ -1,43 +1,85 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { useNavigate } from "react-router";
 import Button from "@/components/common/Button";
 import InputField from "@/components/common/InputField";
 import { EyeIcon, EyeOffIcon, GithubIcon, GoogleIcon } from "@/components/common/Icons";
+import { loginSchema, type LoginSchema } from "./LoginForm.shema";
+import type { IResponseLogin } from "./LoginForm.type";
+import { authServices } from "@/api/services/authServices";
+import { type IApiLoginError } from "@/api/services/authServices.type";
+import AlertMessage from "@/components/common/AlertMessage";
+import { useAppDispatch } from "@/app/hooks";
+import { setUser } from "@/components/profile/profileSlice";
 
 function LoginForm() {
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const [responseMessage, setResponseMessage] = useState<IResponseLogin | null>(null);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginSchema>({
+        resolver: zodResolver(loginSchema),
+        mode: 'onBlur'
+    });
 
-
+    const onSubmit = async (data: LoginSchema) => {
+        try {
+            const res = await authServices.login(data);
+            localStorage.setItem("focusFlowToken", res.data.access_token);
+            dispatch(setUser(res.data.user));
+            setResponseMessage({ message: "Login success, redirecting to home...", type: res.status });
+            setTimeout(() => {
+                void navigate("/");
+            }, 1500);
+        } catch (error) {
+            if (axios.isAxiosError<IApiLoginError>(error)) {
+                const responseData = error.response?.data;
+                const message = responseData?.message ?? "An unknown error occurred";
+                const status = responseData?.status ?? "error";
+                setResponseMessage({
+                    message,
+                    type: status
+                });
+            } else {
+                setResponseMessage({ message: "An unexpected error occurred", type: "error" });
+            }
+        }
     };
 
     const handleSocialLogin = (provider: "GitHub" | "Google") => {
         window.alert(`Continue with ${provider} selected`);
     };
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3 items-center w-full">
-
+        <form onSubmit={(e) => { void handleSubmit(onSubmit)(e); }} className="flex flex-col gap-3 items-center w-full">
+            {responseMessage && (
+                <AlertMessage
+                    description={responseMessage.message}
+                    type={responseMessage.type}
+                />
+            )}
             {/* Email field */}
             <InputField
                 label="Email"
                 id="input-1"
-                name="email"
                 placeholder="name@example.com"
                 type="email"
                 autoComplete="email"
-                required
+                error={errors.email?.message}
+                {...register("email")}
             />
 
             {/* Password field */}
             <InputField
                 label="Password"
                 id="input-2"
-                name="password"
                 placeholder="••••••••"
                 type={isPasswordVisible ? "text" : "password"}
                 autoComplete="current-password"
-                required
+                error={errors.password?.message}
+                {...register("password")}
                 rightIcon={
                     <button
                         type="button"
@@ -51,7 +93,7 @@ function LoginForm() {
             />
 
             {/* Submit button */}
-            <Button variant="primary" type="submit" className="w-full">
+            <Button variant="primary" type="submit" className="w-full" isloading={isSubmitting}>
                 Log In
             </Button>
 
@@ -68,7 +110,7 @@ function LoginForm() {
             {/* Separator */}
             <div className="flex items-center w-full gap-0 py-2.5">
                 <div className="flex-1 h-px bg-border" />
-                <span className="px-3 text-xs leading-[16px] text-text-placeholder">Or</span>
+                <span className="px-3 text-xs leading-4 text-text-placeholder">Or</span>
                 <div className="flex-1 h-px bg-border" />
             </div>
 

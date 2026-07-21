@@ -2,7 +2,7 @@ import { LogoIcon } from "../common/Icons"
 
 function HeaderCard({ title, description }: { title: string, description: string }) {
     return (
-        <div className="flex flex-col items-center gap-[10px] w-full">
+        <div className="flex flex-col items-center gap-2.5 w-full">
             <div className="flex px-4 py-3" >
                 <LogoIcon className="text-primary-600" />
             </div>
