@@ -31,7 +31,8 @@ axiosClient.interceptors.request.use(
 axiosClient.interceptors.response.use(
     (response: AxiosResponse) => {
         // Bóc tách sẵn dữ liệu trả về, tầng component chỉ cần dùng response thay vì response.data
-        return response.data as unknown;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+        return response.data;
     },
     async (error: unknown) => {
         // Xử lý các mã lỗi HTTP trả về từ Server
