@@ -71,7 +71,7 @@ describe("LoginForm Component", () => {
         const user = userEvent.setup();
         render(<LoginForm />);
 
-        const passwordInput = screen.getByLabelText(/^password$/i);
+        const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
         const toggleButton = screen.getByRole("button", { name: /show password/i });
 
         // Initial state: hidden
