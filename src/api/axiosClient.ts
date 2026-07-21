@@ -40,7 +40,7 @@ axiosClient.interceptors.response.use(
 
             switch (status) {
                 case 401:
-                    localStorage.removeItem('token');
+                    localStorage.removeItem('focusFlowToken');
 
                     const isPublicRoute =
                         window.location.pathname === '/login' ||
