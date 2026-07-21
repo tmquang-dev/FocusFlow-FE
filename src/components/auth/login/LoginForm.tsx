@@ -11,9 +11,12 @@ import type { IResponseLogin } from "./LoginForm.type";
 import { authServices } from "@/api/services/authServices";
 import { type IApiLoginError } from "@/api/services/authServices.type";
 import AlertMessage from "@/components/common/AlertMessage";
+import { useAppDispatch } from "@/app/hooks";
+import { setUser } from "@/components/profile/profileSlice";
 
 function LoginForm() {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const [responseMessage, setResponseMessage] = useState<IResponseLogin | null>(null);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -27,6 +30,7 @@ function LoginForm() {
             const res = await authServices.login(data);
             if (res.status === "success") {
                 localStorage.setItem("focusFlowToken", res.data.access_token);
+                dispatch(setUser(res.data.user));
             }
             setResponseMessage({ message: "Login success, redirecting to home...", type: res.status });
             setTimeout(() => {
