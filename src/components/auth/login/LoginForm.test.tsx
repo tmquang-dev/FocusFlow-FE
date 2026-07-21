@@ -71,20 +71,20 @@ describe("LoginForm Component", () => {
         const user = userEvent.setup();
         render(<LoginForm />);
 
-        const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+        const passwordInput = screen.getByLabelText(/^password$/i);
         const toggleButton = screen.getByRole("button", { name: /show password/i });
 
         // Initial state: hidden
-        expect(passwordInput.type).toBe("password");
+        expect(passwordInput).toHaveAttribute("type", "password");
 
         // Click to show
         await user.click(toggleButton);
-        expect(passwordInput.type).toBe("text");
+        expect(passwordInput).toHaveAttribute("type", "text");
         expect(screen.getByRole("button", { name: /hide password/i })).toBeInTheDocument();
 
         // Click again to hide
         await user.click(screen.getByRole("button", { name: /hide password/i }));
-        expect(passwordInput.type).toBe("password");
+        expect(passwordInput).toHaveAttribute("type", "password");
         expect(screen.getByRole("button", { name: /show password/i })).toBeInTheDocument();
     });
 
