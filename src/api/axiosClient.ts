@@ -1,7 +1,8 @@
 import axios, { type AxiosInstance, type AxiosResponse, type InternalAxiosRequestConfig } from 'axios';
 
 // 1. CẤU HÌNH KHỞI TẠO INSTANCE
-const baseURL = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
+const env = (import.meta as unknown as { env?: { VITE_API_URL?: string } }).env;
+const baseURL = env?.VITE_API_URL ?? '';
 
 const axiosClient: AxiosInstance = axios.create({
     baseURL,
