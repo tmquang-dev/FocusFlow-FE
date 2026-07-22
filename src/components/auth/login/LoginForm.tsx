@@ -2,18 +2,20 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
+
 import Button from "@/components/common/Button";
 import InputField from "@/components/common/InputField";
-import { EyeIcon, EyeOffIcon, GithubIcon, GoogleIcon } from "@/components/common/Icons";
+import AlertMessage from "@/components/common/AlertMessage";
+import { useAppDispatch } from "@/app/hooks";
+import { setUser } from "@/components/profile/profileSlice";
+import SocialsAuth from "../socialAuth/SocialAuth";
+
+import { EyeIcon, EyeOffIcon } from "@/components/common/Icons";
 import { loginSchema, type LoginSchema } from "./LoginForm.shema";
 import type { IResponseLogin } from "./LoginForm.type";
 import { authServices } from "@/api/services/authServices";
 import { type IApiLoginError } from "@/api/services/authServices.type";
-import AlertMessage from "@/components/common/AlertMessage";
-import { useAppDispatch } from "@/app/hooks";
-import { setUser } from "@/components/profile/profileSlice";
-
 function LoginForm() {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
@@ -28,22 +30,20 @@ function LoginForm() {
     const onSubmit = async (data: LoginSchema) => {
         try {
             const res = await authServices.login(data);
-            if (res.status === "success") {
-                localStorage.setItem("focusFlowToken", res.data.access_token);
-                dispatch(setUser(res.data.user));
-            }
+            localStorage.setItem("focusFlowToken", res.data.access_token);
+            dispatch(setUser(res.data.user));
             setResponseMessage({ message: "Login success, redirecting to home...", type: res.status });
             setTimeout(() => {
-                navigate("/")
-            }, 1500)
+                void navigate("/");
+            }, 1500);
         } catch (error) {
             if (axios.isAxiosError<IApiLoginError>(error)) {
                 const responseData = error.response?.data;
-                const message = responseData?.message || "An unknown error occurred";
-                const status = responseData?.status || "error";
+                const message = responseData?.message ?? "An unknown error occurred";
+                const status = responseData?.status ?? "error";
                 setResponseMessage({
                     message,
-                    type: (status === "warning" || status === "error") ? status : "error"
+                    type: status
                 });
             } else {
                 setResponseMessage({ message: "An unexpected error occurred", type: "error" });
@@ -51,11 +51,9 @@ function LoginForm() {
         }
     };
 
-    const handleSocialLogin = (provider: "GitHub" | "Google") => {
-        window.alert(`Continue with ${provider} selected`);
-    };
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 items-center w-full">
+        <form onSubmit={(e) => { void handleSubmit(onSubmit)(e); }} className="flex flex-col gap-3 items-center w-full">
             {responseMessage && (
                 <AlertMessage
                     description={responseMessage.message}
@@ -117,37 +115,17 @@ function LoginForm() {
             </div>
 
             {/* Social auth */}
-            <div className="flex flex-col gap-4 w-full">
-                {/* GitHub */}
-                <Button
-                    variant="primary"
-                    onClick={() => { handleSocialLogin("GitHub"); }}
-                    leftIcon={<GithubIcon className="text-white w-5 h-5" />}
-                    className="bg-[#24292f] hover:bg-[#1c2026] active:bg-[#14181c] text-white text-xs font-semibold leading-4 tracking-[0.6px] border"
-                >
-                    Continue with GitHub
-                </Button>
-
-                {/* Google */}
-                <Button
-                    variant="outlined"
-                    onClick={() => { handleSocialLogin("Google"); }}
-                    leftIcon={<GoogleIcon className="w-5 h-5" />}
-                    className="bg-white hover:bg-gray-50 active:bg-gray-100 border border-gray-300 text-text-placeholder text-xs font-semibold leading-4 tracking-[0.6px]"
-                >
-                    Continue with Google
-                </Button>
-            </div>
+            <SocialsAuth />
 
             {/* Sign up link */}
             <div className="flex items-center justify-center gap-1 py-0.5 w-full">
                 <span className="text-text-secondary font-text-medium">New FocusFlow account?</span>
-                <a
-                    href="#create-account"
+                <Link
+                    to="/register"
                     className="text-primary-600 font-text-medium hover:underline cursor-pointer"
                 >
                     Create an account
-                </a>
+                </Link>
             </div>
         </form>
     )
