@@ -18,7 +18,20 @@ export interface IApiLoginSuccess {
 }
 
 export interface IApiLoginError {
-    status: "error" | "warning";
+    status: "error";
+    code: string;
+    message: string;
+}
+export interface IRegisterPayload {
+    email: string;
+}
+
+export interface IApiRegisterSuccess {
+    status: "success";
+    message: string;
+}
+export interface IApiRegisterError {
+    status: "error";
     code: string;
     message: string;
 }
