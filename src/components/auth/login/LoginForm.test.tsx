@@ -1,7 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, jest, beforeEach, afterEach } from "@jest/globals";
 import "@testing-library/jest-dom/jest-globals";
-import { type loginPayload } from "@/api/services/authServices.type";
 
 import { renderWithProviders, screen, waitFor } from "@/utils/test-utils";
 import { authServices } from "@/api/services/authServices";
@@ -12,7 +11,7 @@ describe("LoginForm Component", () => {
 
     beforeEach(() => {
         user = userEvent.setup();
-        jest.spyOn(window, "alert").mockImplementation(() => { });
+        jest.spyOn(window, "alert").mockImplementation(() => undefined);
         jest.clearAllMocks();
     });
 

@@ -29,7 +29,7 @@ function RegisterForm() {
             const res = await authServices.register(data);
             setResponseMessage({ message: res.message, type: res.status });
             setTimeout(() => {
-                navigate("/verify");
+                void navigate("/verify");
             }, 1000);
         } catch (error) {
             if (axios.isAxiosError<IApiRegisterError>(error)) {
@@ -47,7 +47,7 @@ function RegisterForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3 items-center w-full">
+        <form onSubmit={(e) => { void handleSubmit(onSubmit)(e); }} className="flex flex-col gap-3 items-center w-full">
             {/* Alert message */}
             {responseMessage && (
                 <AlertMessage
