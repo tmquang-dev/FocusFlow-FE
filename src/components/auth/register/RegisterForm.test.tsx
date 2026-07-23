@@ -50,6 +50,7 @@ describe("RegisterForm Component", () => {
             expect(registerSpy).toHaveBeenCalledWith({
                 email: "newuser@example.com",
             });
+            expect(localStorage.getItem("otp_resend_newuser@example.com")).toBeTruthy();
         });
     });
 
