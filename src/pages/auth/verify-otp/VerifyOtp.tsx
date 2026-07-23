@@ -1,7 +1,8 @@
 import HeaderCard from "@/components/auth/HeaderCard"
-import RegisterForm from "@/components/auth/register/RegisterForm"
+import VerifyOtpForm from "@/components/auth/verifyOtp/VerifyOtpForm"
+import BackButton from "@/components/common/BackButton"
 
-function Register() {
+function VerifyOtp() {
     return (
         <div className="min-h-screen w-full bg-background-main flex items-center justify-center">
             <div className="w-full max-w-[384px]">
@@ -10,11 +11,11 @@ function Register() {
                     <div className="flex flex-col items-center gap-5.5 p-10">
 
                         {/* Header */}
-                        <HeaderCard title="Register" description="A quiet, distraction-free Kanban board for solo developers." />
+                        <HeaderCard title="Verify OTP" description={`Please enter the verification code sent to`} />
 
                         {/* Form */}
-                        <RegisterForm />
-
+                        <VerifyOtpForm />
+                        <BackButton />
                     </div>
                 </div>
             </div>
@@ -22,4 +23,4 @@ function Register() {
     )
 }
 
-export default Register
+export default VerifyOtp
