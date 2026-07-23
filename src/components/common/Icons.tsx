@@ -260,3 +260,12 @@ export const LoadingIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
         </svg>
     )
 }
+
+export const ChevronLeftIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
+    return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+            <path d="M12.6668 8.00004H3.3335M8.00016 3.33337L3.3335 8.00004L8.00016 12.6667" stroke="#111827" strokeWidth="round" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+
+    )
+}
