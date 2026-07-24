@@ -32,10 +32,11 @@ function VerifyOtpForm() {
 
     const onSubmit = async (data: VerifyOtpSchema) => {
         try {
-            await authServices.verifyOtp({
+            const res = await authServices.verifyOtp({
                 email: email,
                 code: data.otp,
             });
+            sessionStorage.setItem("registration_token", res.data.registration_token);
             localStorage.removeItem(`otp_resend_${email}`);
             setResponseMessage({ message: "OTP verified successfully", type: "success" });
             void navigate("/create-password");

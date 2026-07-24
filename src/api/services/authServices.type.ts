@@ -61,3 +61,28 @@ export type IResendOtpPayload = Pick<IVerifyOtpPayload, "email">;
 export type IApiResendOtpSuccess = Omit<IApiRegisterSuccess, "data">;
 
 export type IApiResendOtpError = Omit<IApiRegisterError, "data">;
+
+export interface ICompleteRegisterPayload {
+    password: string;
+    confirm_password: string;
+}
+
+export interface ICompleteRegisterUserData {
+    id: string;
+    email: string;
+    full_name: string;
+}
+
+export interface IApiCompleteRegisterSuccess {
+    status: "success";
+    data: {
+        access_token: string;
+        user: ICompleteRegisterUserData;
+    };
+}
+
+export interface IApiCompleteRegisterError {
+    status: "error";
+    code: string;
+    message: string;
+}
