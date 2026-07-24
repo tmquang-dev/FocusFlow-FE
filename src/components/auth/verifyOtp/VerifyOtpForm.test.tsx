@@ -69,6 +69,7 @@ describe("VerifyOtpForm Component", () => {
                 email: defaultEmail,
                 code: "123456",
             });
+            expect(sessionStorage.getItem("registration_token")).toBe("mock-reg-token");
         });
 
         await waitFor(() => {
