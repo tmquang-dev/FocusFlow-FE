@@ -49,8 +49,8 @@ function CreatePasswordForm() {
             setResponseMessage({ message: "Account created successfully", type: "success" });
 
             setTimeout(() => {
-                void navigate("/");
                 sessionStorage.removeItem("registration_token");
+                void navigate("/");
             }, 1000);
         } catch (error) {
             if (axios.isAxiosError<IApiCompleteRegisterError>(error)) {
