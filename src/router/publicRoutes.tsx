@@ -1,7 +1,8 @@
 import type { RouteObject } from "react-router";
-import Register from "../pages/auth/register/Register.tsx";
-import Login from "../pages/auth/login/Login.tsx";
+import Register from "@/pages/auth/register/Register.tsx";
+import Login from "@/pages/auth/login/Login.tsx";
 import GuestRoutes from "@/components/GuestRoutes.tsx";
+import VerifyOtp from "@/pages/auth/verify-otp/VerifyOtp.tsx";
 
 export const publicRoutes: RouteObject = {
     element: <GuestRoutes />,
@@ -13,6 +14,11 @@ export const publicRoutes: RouteObject = {
         {
             path: "register",
             element: <Register />
+        },
+        {
+            path: "verify-otp",
+            element: <VerifyOtp />
         }
+
     ]
 }

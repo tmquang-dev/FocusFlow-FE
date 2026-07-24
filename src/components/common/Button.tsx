@@ -38,7 +38,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 variantClasses = "bg-secondary-50 hover:bg-primary-50 active:bg-primary-100 border border-border text-text-primary text-xs font-semibold leading-4 tracking-[0.6px]";
                 break;
             case "text":
-                variantClasses = "hover:text-text-hover active:text-text-active text-text-primary text-xs font-semibold leading-4 tracking-[0.6px]";
+                variantClasses = "hover:text-text-hover hover:bg-gray-100 active:text-text-active active:bg-gray-200 text-text-primary text-xs font-semibold leading-4 tracking-[0.6px]";
                 break;
         }
 

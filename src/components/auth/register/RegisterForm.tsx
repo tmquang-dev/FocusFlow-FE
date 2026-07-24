@@ -26,11 +26,13 @@ function RegisterForm() {
 
     const onSubmit = async (data: RegisterSchema) => {
         try {
-            const res = await authServices.register(data);
-            setResponseMessage({ message: res.message, type: res.status });
-            setTimeout(() => {
-                void navigate("/verify");
-            }, 1000);
+            await authServices.register(data);
+            // set timestamp to local storage
+            const availableAt = Date.now() + 60 * 1000;
+            localStorage.setItem(`otp_resend_${data.email}`, availableAt.toString());
+
+            // Transfer email to URL Query String
+            void navigate(`/verify-otp?email=${encodeURIComponent(data.email)}`);
         } catch (error) {
             if (axios.isAxiosError<IApiRegisterError>(error)) {
                 const responseData = error.response?.data;
