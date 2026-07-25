@@ -86,3 +86,24 @@ export interface IApiCompleteRegisterError {
     code: string;
     message: string;
 }
+
+export type IForgotPasswordPayload = Pick<IRegisterPayload, "email">;
+
+export type IApiForgotPasswordSuccess = Omit<IApiRegisterSuccess, "data">;
+
+export type IApiForgotPasswordError = Omit<IApiRegisterError, "data">;
+
+export type IVerifyPasswordOtpPayload = IVerifyOtpPayload;
+
+export interface IApiVerifyPasswordOtpSuccess {
+    status: "success";
+    data: {
+        reset_token: string;
+    };
+}
+
+export type IApiVerifyPasswordOtpError = IApiVerifyOtpError;
+
+export type IResendPasswordOtpPayload = IResendOtpPayload;
+
+export type IApiResendPasswordOtpSuccess = IApiResendOtpSuccess;
