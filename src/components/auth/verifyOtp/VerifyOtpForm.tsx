@@ -42,7 +42,7 @@ function VerifyOtpForm() {
                 sessionStorage.setItem("reset_token", res.data.reset_token);
                 localStorage.removeItem(`otp_resend_${email}`);
                 setResponseMessage({ message: "OTP verified successfully", type: "success" });
-                void navigate("/reset-password");
+                void navigate("/create-password?type=reset_password");
             } else {
                 const res = await authServices.verifyOtp({
                     email: email,
