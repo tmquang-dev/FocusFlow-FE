@@ -26,7 +26,7 @@ describe("LoginForm Component", () => {
         expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
         expect(screen.getByRole("button", { name: /log in/i })).toBeInTheDocument();
         expect(screen.getByRole("button", { name: /continue with github/i })).toBeInTheDocument();
-        expect(screen.getByRole("link", { name: /forgot password\?/i })).toHaveAttribute("href", "#forgot-password");
+        expect(screen.getByRole("link", { name: /forgot password\?/i })).toHaveAttribute("href", "/forgot-password");
     });
 
     it("should toggle password visibility when clicking toggle button", async () => {

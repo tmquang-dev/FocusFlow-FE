@@ -99,12 +99,12 @@ function LoginForm() {
 
             {/* Forgot password */}
             <div className="flex justify-end w-full">
-                <a
-                    href="#forgot-password"
+                <Link
+                    to="/forgot-password"
                     className="text-primary-600 font-text-medium hover:underline cursor-pointer"
                 >
                     Forgot password?
-                </a>
+                </Link>
             </div>
 
             {/* Separator */}
