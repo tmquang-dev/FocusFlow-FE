@@ -107,3 +107,9 @@ export type IApiVerifyPasswordOtpError = IApiVerifyOtpError;
 export type IResendPasswordOtpPayload = IResendOtpPayload;
 
 export type IApiResendPasswordOtpSuccess = IApiResendOtpSuccess;
+
+export type IResetPasswordPayload = ICompleteRegisterPayload;
+
+export type IApiResetPasswordSuccess = IApiRegisterSuccess;
+
+export type IApiResetPasswordError = IApiRegisterError;

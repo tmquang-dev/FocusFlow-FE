@@ -8,6 +8,7 @@ import {
     type IForgotPasswordPayload,
     type IVerifyPasswordOtpPayload,
     type IResendPasswordOtpPayload,
+    type IResetPasswordPayload,
     type IApiLoginSuccess,
     type IApiRegisterSuccess,
     type IApiVerifyOtpSuccess,
@@ -16,6 +17,7 @@ import {
     type IApiForgotPasswordSuccess,
     type IApiVerifyPasswordOtpSuccess,
     type IApiResendPasswordOtpSuccess,
+    type IApiResetPasswordSuccess,
 } from "./authServices.type";
 
 export const authServices = {
@@ -39,5 +41,11 @@ export const authServices = {
         axiosClient.post("/v1/auth/password/resend-otp", payload),
     verifyPasswordOtp: (payload: IVerifyPasswordOtpPayload): Promise<IApiVerifyPasswordOtpSuccess> =>
         axiosClient.post("/v1/auth/password/verify-otp", payload),
+    resetPassword: (payload: IResetPasswordPayload, token: string): Promise<IApiResetPasswordSuccess> =>
+        axiosClient.post("/v1/auth/password/reset", payload, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }),
     logout: () => axiosClient.post("/v1/auth/logout"),
 };
