@@ -18,6 +18,7 @@ import {
     type IApiVerifyPasswordOtpSuccess,
     type IApiResendPasswordOtpSuccess,
     type IApiResetPasswordSuccess,
+    type IApiRefreshTokenSuccess,
 } from "./authServices.type";
 
 export const authServices = {
@@ -47,5 +48,7 @@ export const authServices = {
                 Authorization: `Bearer ${token}`,
             },
         }),
+    refreshToken: (): Promise<IApiRefreshTokenSuccess> =>
+        axiosClient.post("/v1/auth/refresh-token"),
     logout: () => axiosClient.post("/v1/auth/logout"),
 };
