@@ -77,7 +77,6 @@ describe("CreatePasswordForm Component", () => {
         const completeSpy = jest.spyOn(authServices, "completeRegister").mockResolvedValueOnce({
             status: "success",
             data: {
-                access_token: "mock-access-token",
                 user: {
                     id: "user-id-1",
                     email: "test@example.com",
@@ -105,7 +104,6 @@ describe("CreatePasswordForm Component", () => {
                 },
                 defaultToken
             );
-            expect(localStorage.getItem("focusFlowToken")).toBe("mock-access-token");
         });
     });
 

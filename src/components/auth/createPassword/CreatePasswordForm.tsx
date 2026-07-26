@@ -67,7 +67,6 @@ function CreatePasswordForm() {
                     token
                 );
 
-                localStorage.setItem("focusFlowToken", res.data.access_token);
                 dispatch(setUser(res.data.user));
                 setResponseMessage({ message: "Account created successfully", type: "success" });
 

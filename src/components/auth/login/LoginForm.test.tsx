@@ -68,7 +68,6 @@ describe("LoginForm Component", () => {
         jest.spyOn(authServices, "login").mockResolvedValueOnce({
             status: "success",
             data: {
-                access_token: "mock-token",
                 user: {
                     id: "6a574acdd4dc04b4afa1e9fa",
                     email: "user@example.com",

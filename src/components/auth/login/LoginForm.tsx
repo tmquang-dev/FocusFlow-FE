@@ -30,7 +30,6 @@ function LoginForm() {
     const onSubmit = async (data: LoginSchema) => {
         try {
             const res = await authServices.login(data);
-            localStorage.setItem("focusFlowToken", res.data.access_token);
             dispatch(setUser(res.data.user));
             setResponseMessage({ message: "Login success, redirecting to home...", type: res.status });
             setTimeout(() => {
