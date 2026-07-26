@@ -1,22 +1,27 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { type ILoginUserData } from "@/api/services/authServices.type";
+import type { IUser } from "@/api/services/authServices.type";
 
 interface ProfileState {
-    user: ILoginUserData | null;
+    user: IUser | null;
+    isInitializing: boolean;
 }
 
 const initialState: ProfileState = {
     user: null,
+    isInitializing: true,
 };
 
 const profileSlice = createSlice({
     name: "profile",
     initialState,
     reducers: {
-        setUser: (state, action: PayloadAction<ILoginUserData>) => {
+        setInitializing: (state, action: PayloadAction<boolean>) => {
+            state.isInitializing = action.payload;
+        },
+        setUser: (state, action: PayloadAction<IUser>) => {
             state.user = action.payload;
         },
-        updateUser: (state, action: PayloadAction<Partial<ILoginUserData>>) => {
+        updateUser: (state, action: PayloadAction<Partial<IUser>>) => {
             if (state.user) {
                 state.user = { ...state.user, ...action.payload };
             }
@@ -27,5 +32,5 @@ const profileSlice = createSlice({
     },
 });
 
-export const { setUser, updateUser, clearUser } = profileSlice.actions;
+export const { setInitializing, setUser, updateUser, clearUser } = profileSlice.actions;
 export default profileSlice.reducer;
