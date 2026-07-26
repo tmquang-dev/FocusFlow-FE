@@ -29,14 +29,35 @@ describe("CreatePasswordForm Component", () => {
         expect(screen.getByRole("button", { name: /create account/i })).toBeInTheDocument();
     });
 
-    it("should display validation error when password is less than 6 characters", async () => {
+    it("should toggle password and confirm password visibility when clicking eye buttons", async () => {
+        renderWithProviders(<CreatePasswordForm />);
+
+        const passwordInput = screen.getByLabelText(/^password$/i);
+        const confirmInput = screen.getByLabelText(/^confirm password$/i);
+
+        expect(passwordInput).toBeInTheDocument();
+        expect(confirmInput).toBeInTheDocument();
+
+        expect((passwordInput as HTMLInputElement).type).toBe("password");
+        expect((confirmInput as HTMLInputElement).type).toBe("password");
+
+        const togglePassBtn = screen.getByRole("button", { name: /show password/i });
+        await user.click(togglePassBtn);
+        expect((passwordInput as HTMLInputElement).type).toBe("text");
+
+        const toggleConfirmBtn = screen.getByRole("button", { name: /show confirm password/i });
+        await user.click(toggleConfirmBtn);
+        expect((confirmInput as HTMLInputElement).type).toBe("text");
+    });
+
+    it("should display validation error when password is less than 8 characters", async () => {
         renderWithProviders(<CreatePasswordForm />);
 
         const passwordInput = screen.getByLabelText(/^password$/i);
         await user.type(passwordInput, "123");
         await user.tab();
 
-        expect(await screen.findByText(/Password must be at least 6 characters/i)).toBeInTheDocument();
+        expect(await screen.findByText(/Password must be at least 8 characters/i)).toBeInTheDocument();
     });
 
     it("should display error when confirm password does not match password", async () => {
@@ -52,11 +73,10 @@ describe("CreatePasswordForm Component", () => {
         expect(await screen.findByText(/Passwords do not match/i)).toBeInTheDocument();
     });
 
-    it("should call authServices.completeRegister when submitting valid matching passwords", async () => {
+    it("should call authServices.completeRegister when submitting valid matching passwords in register flow", async () => {
         const completeSpy = jest.spyOn(authServices, "completeRegister").mockResolvedValueOnce({
             status: "success",
             data: {
-                access_token: "mock-access-token",
                 user: {
                     id: "user-id-1",
                     email: "test@example.com",
@@ -84,7 +104,41 @@ describe("CreatePasswordForm Component", () => {
                 },
                 defaultToken
             );
-            expect(localStorage.getItem("focusFlowToken")).toBe("mock-access-token");
+        });
+    });
+
+    it("should call authServices.resetPassword when submitting valid matching passwords in reset_password flow", async () => {
+        const resetToken = "test-reset-token-456";
+        sessionStorage.setItem("reset_token", resetToken);
+
+        const resetSpy = jest.spyOn(authServices, "resetPassword").mockResolvedValueOnce({
+            status: "success",
+            message: "Password reset successfully",
+        });
+
+        renderWithProviders(<CreatePasswordForm />, {
+            initialEntries: ["/create-password?type=reset_password"],
+        });
+
+        expect(screen.getByRole("button", { name: /reset password/i })).toBeInTheDocument();
+
+        const passwordInput = screen.getByLabelText(/^password$/i);
+        const confirmInput = screen.getByLabelText(/^confirm password$/i);
+
+        await user.type(passwordInput, "NewSecurePassword123!");
+        await user.type(confirmInput, "NewSecurePassword123!");
+
+        const submitBtn = screen.getByRole("button", { name: /reset password/i });
+        fireEvent.submit(submitBtn);
+
+        await waitFor(() => {
+            expect(resetSpy).toHaveBeenCalledWith(
+                {
+                    password: "NewSecurePassword123!",
+                    confirm_password: "NewSecurePassword123!",
+                },
+                resetToken
+            );
         });
     });
 

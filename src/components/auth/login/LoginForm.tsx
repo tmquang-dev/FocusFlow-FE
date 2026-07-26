@@ -30,7 +30,6 @@ function LoginForm() {
     const onSubmit = async (data: LoginSchema) => {
         try {
             const res = await authServices.login(data);
-            localStorage.setItem("focusFlowToken", res.data.access_token);
             dispatch(setUser(res.data.user));
             setResponseMessage({ message: "Login success, redirecting to home...", type: res.status });
             setTimeout(() => {
@@ -99,12 +98,12 @@ function LoginForm() {
 
             {/* Forgot password */}
             <div className="flex justify-end w-full">
-                <a
-                    href="#forgot-password"
+                <Link
+                    to="/forgot-password"
                     className="text-primary-600 font-text-medium hover:underline cursor-pointer"
                 >
                     Forgot password?
-                </a>
+                </Link>
             </div>
 
             {/* Separator */}
