@@ -1,9 +1,10 @@
 import { Navigate, Outlet } from "react-router";
+import { useAppSelector } from "@/app/hooks";
 
 export default function GuestRoutes() {
-    const isAuthenticated = localStorage.getItem("focusFlowToken") ? true : false;
+    const user = useAppSelector((state) => state.profile.user);
 
-    if (isAuthenticated) {
+    if (user) {
         return <Navigate to="/" replace />;
     }
 

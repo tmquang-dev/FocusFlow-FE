@@ -1,19 +1,25 @@
+export interface IUser {
+    id: string;
+    email: string;
+    full_name: string;
+    avatar?: string | null;
+    is_verified?: boolean;
+    auth_provider?: string;
+    created_at?: string;
+}
+
+export type ILoginUserData = IUser;
+export type ICompleteRegisterUserData = IUser;
+
 export interface loginPayload {
     email: string;
     password: string;
 }
 
-export interface ILoginUserData {
-    id: string;
-    email: string;
-    full_name: string;
-}
-
 export interface IApiLoginSuccess {
     status: "success";
     data: {
-        access_token: string;
-        user: ILoginUserData;
+        user: IUser;
     };
 }
 
@@ -67,17 +73,10 @@ export interface ICompleteRegisterPayload {
     confirm_password: string;
 }
 
-export interface ICompleteRegisterUserData {
-    id: string;
-    email: string;
-    full_name: string;
-}
-
 export interface IApiCompleteRegisterSuccess {
     status: "success";
     data: {
-        access_token: string;
-        user: ICompleteRegisterUserData;
+        user: IUser;
     };
 }
 
@@ -113,3 +112,15 @@ export type IResetPasswordPayload = ICompleteRegisterPayload;
 export type IApiResetPasswordSuccess = IApiRegisterSuccess;
 
 export type IApiResetPasswordError = IApiRegisterError;
+
+export interface IApiGetMeSuccess {
+    status: "success";
+    data: {
+        user: IUser;
+    };
+}
+
+export interface IApiRefreshTokenSuccess {
+    status: "success";
+    message: string;
+}
