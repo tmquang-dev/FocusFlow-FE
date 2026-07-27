@@ -1,5 +1,5 @@
 import type { RouteObject } from "react-router";
-import MainLayout from "../components/layouts/mainLayout";
+import MainLayout from "../components/layouts/MainLayout";
 import Home from "../pages/home/Home";
 import ProtectedRoutes from "../components/ProtectedRoutes";
 

@@ -5,6 +5,7 @@
 }
 
 @theme {
+  --max-width-page-content: 1220px;
   /* Fonts */
   --font-inter: "Inter", sans-serif;
   --font-jetbrains-mono: "JetBrains Mono", sans-serif;
@@ -68,6 +69,8 @@
   --color-green-200: #BBF7D0;
   --color-green-100: #DCFCE7;
   --color-green-50: #F0FDF4;
+
+  --shadow-custom-gray: -1px 2px 2px 0 var(--color-border);
 }
 
 @layer theme {

@@ -1,10 +1,12 @@
 import { Outlet } from "react-router"
+import Header from "./header/Header"
+import Footer from "./footer/Footer"
 function MainLayout() {
     return (
         <div>
-            <header>this is header</header>
+            <Header />
             <Outlet />
-            <footer>this is footer</footer>
+            <Footer />
         </div>
     )
 }
