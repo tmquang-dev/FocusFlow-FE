@@ -2,9 +2,9 @@ import { Outlet } from "react-router"
 function MainLayout() {
     return (
         <div>
-            <header>this is header</header>
+            <header>This is header</header>
             <Outlet />
-            <footer>this is footer</footer>
+            <footer>This is footer</footer>
         </div>
     )
 }
