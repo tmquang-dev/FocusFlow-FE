@@ -269,3 +269,36 @@ export const ChevronLeftIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) 
 
     )
 }
+export const MenuBurger: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
+    return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
+            <path d="M15.3043 7.30477H0.695641C0.311445 7.30477 0 7.61622 0 8.00041C0 8.38461 0.311445 8.69605 0.695641 8.69605H15.3043C15.6885 8.69605 16 8.38461 16 8.00041C16 7.61622 15.6885 7.30477 15.3043 7.30477Z" fill="#111827" />
+            <path d="M0.695641 3.82623H15.3043C15.6885 3.82623 16 3.51479 16 3.13059C16 2.7464 15.6885 2.43495 15.3043 2.43495H0.695641C0.311445 2.43495 0 2.7464 0 3.13059C0 3.51479 0.311445 3.82623 0.695641 3.82623Z" fill="#111827" />
+            <path d="M15.3043 12.174H0.695641C0.311445 12.174 0 12.4855 0 12.8697C0 13.2539 0.311445 13.5653 0.695641 13.5653H15.3043C15.6885 13.5653 16 13.2539 16 12.8697C16 12.4855 15.6885 12.174 15.3043 12.174Z" fill="#111827" />
+        </svg>
+
+    )
+}
+export const UserIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
+    return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
+            <path d="M2.66671 14V12.6667C2.66671 11.9594 2.94766 11.2811 3.44776 10.781C3.94785 10.281 4.62613 10 5.33337 10H10.6667C11.374 10 12.0522 10.281 12.5523 10.781C13.0524 11.2811 13.3334 11.9594 13.3334 12.6667V14" fill="#111827" />
+            <path d="M8.00004 7.33333C6.52728 7.33333 5.33337 6.13943 5.33337 4.66667C5.33337 3.19391 6.52728 2 8.00004 2C9.4728 2 10.6667 3.19391 10.6667 4.66667C10.6667 6.13943 9.4728 7.33333 8.00004 7.33333Z" fill="#111827" />
+        </svg>
+    )
+}
+export const ArrowDownIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
+    return (
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
+            <path d="M6 4.3L9 7.3L8.3 8L6 5.7L3.7 8L3 7.3L6 4.3Z" fill="#111827" />
+        </svg>
+    )
+}
+export const LogOutIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
+    return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
+            <path d="M6 14H3.33333C2.97971 14 2.64057 13.8595 2.39052 13.6095C2.14048 13.3594 2 13.0203 2 12.6667V3.33333C2 2.97971 2.14048 2.64057 2.39052 2.39052C2.64057 2.14048 2.97971 2 3.33333 2H6M10.6667 4.66667L14 8L10.6667 11.3333M14 8H6" stroke="#111827" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+
+    )
+}
