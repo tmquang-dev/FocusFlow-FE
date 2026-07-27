@@ -35,11 +35,9 @@ function Menu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
 
     return (
         <div className="absolute -left-29 -bottom-17 w-40 flex flex-col justify-center items-start bg-background-secondary-0 rounded-sm border border-border shadow-custom-gray overflow-hidden z-50">
-            <Link to="/profile" className="w-full">
-                <Button onClick={onClose} leftIcon={<UserIcon className="text-text-main" />} variant="outlined" className="text-text-main py-2 px-4 rounded-none w-full justify-start font-text-default">
-                    Profile
-                </Button>
-            </Link>
+            <Button to="/profile" onClick={onClose} leftIcon={<UserIcon className="text-text-main" />} variant="outlined" className="text-text-main py-2 px-4 rounded-none w-full justify-start font-text-default">
+                Profile
+            </Button>
             <Button onClick={() => { void handleLogOut(); }} leftIcon={<LogOutIcon className="text-text-main" />} variant="outlined" className="text-text-main py-2 px-4 rounded-none w-full justify-start font-text-default">
                 Log out
             </Button>
