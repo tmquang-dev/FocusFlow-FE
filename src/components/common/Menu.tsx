@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import Button from "./Button";
 import { LogOutIcon, UserIcon } from "./Icons";
 import { authServices } from "@/api/services/authServices";
