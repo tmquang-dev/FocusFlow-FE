@@ -341,3 +341,38 @@ export const PlusIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
 
     )
 }
+export const ClockIcon = ({ className = "" }: { className?: string }) => (
+    <svg
+        aria-hidden="true"
+        className={className}
+        fill="none"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.75" />
+        <path
+            d="M12 7v5l3 2"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1.75"
+        />
+    </svg>
+);
+export const AddTaskIcon = ({ className = "" }: { className?: string }) => (
+    <svg
+        aria-hidden="true"
+        className={className}
+        fill="none"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="1.5" />
+        <path
+            d="M12 8v8M8 12h8"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeWidth="1.5"
+        />
+    </svg>
+);
