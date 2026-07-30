@@ -4,8 +4,8 @@ import { useState } from "react"
 function AddNewTask() {
     const [taskTitle, setTaskTitle] = useState("");
 
-    const handleAddTask = (data: any) => {
-        console.log("Data", data)
+    const handleAddTask = () => {
+        console.log("Data", taskTitle)
     }
     return (
         <form
