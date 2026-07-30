@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, jest, beforeEach, afterEach } from "@jest/globals";
-import "@testing-library/jest-dom/jest-globals";
+import { vi } from "vitest";
+
 
 import { renderWithProviders, screen, waitFor, fireEvent } from "@/utils/test-utils";
 import { authServices } from "@/api/services/authServices";
@@ -12,12 +12,12 @@ describe("CreatePasswordForm Component", () => {
 
     beforeEach(() => {
         user = userEvent.setup();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         sessionStorage.setItem("registration_token", defaultToken);
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
         sessionStorage.clear();
     });
 
@@ -74,7 +74,7 @@ describe("CreatePasswordForm Component", () => {
     });
 
     it("should call authServices.completeRegister when submitting valid matching passwords in register flow", async () => {
-        const completeSpy = jest.spyOn(authServices, "completeRegister").mockResolvedValueOnce({
+        const completeSpy = vi.spyOn(authServices, "completeRegister").mockResolvedValueOnce({
             status: "success",
             data: {
                 user: {
@@ -111,7 +111,7 @@ describe("CreatePasswordForm Component", () => {
         const resetToken = "test-reset-token-456";
         sessionStorage.setItem("reset_token", resetToken);
 
-        const resetSpy = jest.spyOn(authServices, "resetPassword").mockResolvedValueOnce({
+        const resetSpy = vi.spyOn(authServices, "resetPassword").mockResolvedValueOnce({
             status: "success",
             message: "Password reset successfully",
         });
@@ -143,7 +143,7 @@ describe("CreatePasswordForm Component", () => {
     });
 
     it("should display server error message when completeRegister fails", async () => {
-        jest.spyOn(authServices, "completeRegister").mockRejectedValueOnce({
+        vi.spyOn(authServices, "completeRegister").mockRejectedValueOnce({
             isAxiosError: true,
             response: { data: { message: "Invalid token or expired session", status: "error" } },
         });

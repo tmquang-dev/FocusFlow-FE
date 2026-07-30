@@ -88,7 +88,7 @@ describe("ResendOtp Component", () => {
         const pastTime = Date.now() - 1000;
         localStorage.setItem(`otp_resend_${defaultEmail}`, pastTime.toString());
 
-        const resendPasswordSpy = jest.spyOn(authServices, "resendPasswordOtp").mockResolvedValueOnce({
+        const resendPasswordSpy = vi.spyOn(authServices, "resendPasswordOtp").mockResolvedValueOnce({
             status: "success",
             message: "OTP resent successfully",
         });

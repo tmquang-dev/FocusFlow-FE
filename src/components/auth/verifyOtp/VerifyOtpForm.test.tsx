@@ -81,7 +81,7 @@ describe("VerifyOtpForm Component", () => {
     });
 
     it("should call authServices.verifyPasswordOtp when type is reset_password", async () => {
-        const verifyPasswordSpy = jest.spyOn(authServices, "verifyPasswordOtp").mockResolvedValueOnce({
+        const verifyPasswordSpy = vi.spyOn(authServices, "verifyPasswordOtp").mockResolvedValueOnce({
             status: "success",
             data: {
                 reset_token: "mock-reset-token",
