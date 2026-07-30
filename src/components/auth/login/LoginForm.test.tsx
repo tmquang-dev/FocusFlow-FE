@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, jest, beforeEach, afterEach } from "@jest/globals";
-import "@testing-library/jest-dom/jest-globals";
+import { vi } from "vitest";
+
 
 import { renderWithProviders, screen, waitFor } from "@/utils/test-utils";
 import { authServices } from "@/api/services/authServices";
@@ -11,12 +11,12 @@ describe("LoginForm Component", () => {
 
     beforeEach(() => {
         user = userEvent.setup();
-        jest.spyOn(window, "alert").mockImplementation(() => undefined);
-        jest.clearAllMocks();
+        vi.spyOn(window, "alert").mockImplementation(() => undefined);
+        vi.clearAllMocks();
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("should render essential form controls and navigation links", () => {
@@ -65,7 +65,7 @@ describe("LoginForm Component", () => {
     });
 
     it("should call authService.login when submitting valid credentials", async () => {
-        jest.spyOn(authServices, "login").mockResolvedValueOnce({
+        vi.spyOn(authServices, "login").mockResolvedValueOnce({
             status: "success",
             data: {
                 access_token: "mock-token",

@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, jest, beforeEach, afterEach } from "@jest/globals";
-import "@testing-library/jest-dom/jest-globals";
+import { vi } from "vitest";
+
 
 import { renderWithProviders, screen, waitFor, fireEvent } from "@/utils/test-utils";
 import { authServices } from "@/api/services/authServices";
@@ -19,12 +19,12 @@ describe("VerifyOtpForm Component", () => {
 
     beforeEach(() => {
         user = userEvent.setup();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         localStorage.clear();
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
         localStorage.clear();
     });
 
@@ -49,7 +49,7 @@ describe("VerifyOtpForm Component", () => {
     it("should call authServices.verifyOtp when submitting valid 6-digit OTP and remove resend key from localStorage", async () => {
         localStorage.setItem(`otp_resend_${defaultEmail}`, (Date.now() + 60000).toString());
 
-        const verifySpy = jest.spyOn(authServices, "verifyOtp").mockResolvedValueOnce({
+        const verifySpy = vi.spyOn(authServices, "verifyOtp").mockResolvedValueOnce({
             status: "success",
             data: {
                 registration_token: "mock-reg-token",
@@ -82,7 +82,7 @@ describe("VerifyOtpForm Component", () => {
             resolvePromise = resolve;
         });
 
-        jest.spyOn(authServices, "verifyOtp").mockReturnValueOnce(pendingPromise);
+        vi.spyOn(authServices, "verifyOtp").mockReturnValueOnce(pendingPromise);
 
         renderVerifyOtpForm();
 

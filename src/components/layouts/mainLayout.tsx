@@ -1,10 +1,14 @@
 import { Outlet } from "react-router"
+import Header from "./header/Header"
+import Footer from "./footer/Footer"
 function MainLayout() {
     return (
         <div>
-            <header>this is header</header>
-            <Outlet />
-            <footer>this is footer</footer>
+            <Header />
+            <main className="flex mt-10">
+                <Outlet />
+            </main>
+            <Footer />
         </div>
     )
 }
