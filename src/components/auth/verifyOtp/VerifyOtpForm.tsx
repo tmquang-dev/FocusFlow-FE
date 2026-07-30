@@ -18,27 +18,41 @@ function VerifyOtpForm() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const email = searchParams.get("email") ?? "";
+    const type = searchParams.get("type") ?? "register";
 
     const [responseMessage, setResponseMessage] = useState<IResponseMessage | null>(null);
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<VerifyOtpSchema>({
         resolver: zodResolver(verifyOtpSchema),
         mode: 'onBlur',
     });
+
     useEffect(() => {
         if (!email) {
-            void navigate("/register");
+            void navigate(type === "reset_password" ? "/forgot-password" : "/register");
         }
-    }, [email, navigate]);
+    }, [email, type, navigate]);
 
     const onSubmit = async (data: VerifyOtpSchema) => {
         try {
-            await authServices.verifyOtp({
-                email: email,
-                code: data.otp,
-            });
-            localStorage.removeItem(`otp_resend_${email}`);
-            setResponseMessage({ message: "OTP verified successfully", type: "success" });
-            void navigate("/create-password");
+            if (type === "reset_password") {
+                const res = await authServices.verifyPasswordOtp({
+                    email: email,
+                    code: data.otp,
+                });
+                sessionStorage.setItem("reset_token", res.data.reset_token);
+                localStorage.removeItem(`otp_resend_${email}`);
+                setResponseMessage({ message: "OTP verified successfully", type: "success" });
+                void navigate("/create-password?type=reset_password");
+            } else {
+                const res = await authServices.verifyOtp({
+                    email: email,
+                    code: data.otp,
+                });
+                sessionStorage.setItem("registration_token", res.data.registration_token);
+                localStorage.removeItem(`otp_resend_${email}`);
+                setResponseMessage({ message: "OTP verified successfully", type: "success" });
+                void navigate("/create-password");
+            }
         } catch (error) {
             if (axios.isAxiosError<IApiVerifyOtpError>(error)) {
                 const responseData = error.response?.data;
@@ -77,9 +91,6 @@ function VerifyOtpForm() {
             <Button isloading={isSubmitting} variant="primary" type="submit" className="w-full">
                 Verify OTP
             </Button>
-
-
-
 
             {/* Sign up link */}
             <div className="flex items-center justify-center gap-1 py-0.5 w-full">

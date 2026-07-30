@@ -11,9 +11,10 @@ describe("VerifyOtpForm Component", () => {
     let user: ReturnType<typeof userEvent.setup>;
     const defaultEmail = "user@example.com";
 
-    const renderVerifyOtpForm = (email = defaultEmail) => {
+    const renderVerifyOtpForm = (email = defaultEmail, type?: string) => {
+        const typeQuery = type ? `&type=${type}` : "";
         return renderWithProviders(<VerifyOtpForm />, {
-            initialEntries: [`/verify-otp?email=${encodeURIComponent(email)}`],
+            initialEntries: [`/verify-otp?email=${encodeURIComponent(email)}${typeQuery}`],
         });
     };
 
@@ -21,11 +22,13 @@ describe("VerifyOtpForm Component", () => {
         user = userEvent.setup();
         vi.clearAllMocks();
         localStorage.clear();
+        sessionStorage.clear();
     });
 
     afterEach(() => {
         vi.restoreAllMocks();
         localStorage.clear();
+        sessionStorage.clear();
     });
 
     it("should render essential form controls and resend button", () => {
@@ -46,7 +49,7 @@ describe("VerifyOtpForm Component", () => {
         expect(await screen.findByText(/OTP code must be 6 digits/i)).toBeInTheDocument();
     });
 
-    it("should call authServices.verifyOtp when submitting valid 6-digit OTP and remove resend key from localStorage", async () => {
+    it("should call authServices.verifyOtp when submitting valid 6-digit OTP in register flow", async () => {
         localStorage.setItem(`otp_resend_${defaultEmail}`, (Date.now() + 60000).toString());
 
         const verifySpy = vi.spyOn(authServices, "verifyOtp").mockResolvedValueOnce({
@@ -69,11 +72,37 @@ describe("VerifyOtpForm Component", () => {
                 email: defaultEmail,
                 code: "123456",
             });
+            expect(sessionStorage.getItem("registration_token")).toBe("mock-reg-token");
         });
 
         await waitFor(() => {
             expect(localStorage.getItem(`otp_resend_${defaultEmail}`)).toBeNull();
         }, { timeout: 1000 });
+    });
+
+    it("should call authServices.verifyPasswordOtp when type is reset_password", async () => {
+        const verifyPasswordSpy = jest.spyOn(authServices, "verifyPasswordOtp").mockResolvedValueOnce({
+            status: "success",
+            data: {
+                reset_token: "mock-reset-token",
+            },
+        });
+
+        renderVerifyOtpForm(defaultEmail, "reset_password");
+
+        const otpInput = screen.getByPlaceholderText(/enter otp/i);
+        await user.type(otpInput, "654321");
+
+        const submitBtn = screen.getByRole("button", { name: /verify otp/i });
+        fireEvent.submit(submitBtn);
+
+        await waitFor(() => {
+            expect(verifyPasswordSpy).toHaveBeenCalledWith({
+                email: defaultEmail,
+                code: "654321",
+            });
+            expect(sessionStorage.getItem("reset_token")).toBe("mock-reset-token");
+        });
     });
 
     it("should disable submit button while request is pending", async () => {

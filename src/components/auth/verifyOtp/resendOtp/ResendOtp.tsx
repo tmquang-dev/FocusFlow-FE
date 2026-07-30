@@ -1,5 +1,6 @@
 import Button from "@/components/common/Button";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
 import { authServices } from "@/api/services/authServices";
 import axios from "axios";
 
@@ -9,12 +10,14 @@ import type { IApiVerifyOtpError } from "@/api/services/authServices.type";
 const COOLDOWN_TIME_SECONDS = 60;
 
 function ResendOtp({ email, setResponseMessage }: { email: string; setResponseMessage: (message: IResponseMessage | null) => void }) {
+    const [searchParams] = useSearchParams();
+    const type = searchParams.get("type") ?? "register";
     const storageKey = `otp_resend_${email}`;
 
     // Hàm tính toán số giây còn lại từ localStorage
     const getRemainingSeconds = (): number => {
         const savedAvailableAt = localStorage.getItem(storageKey);
-        if (!savedAvailableAt) return COOLDOWN_TIME_SECONDS; // Mặc định khi vừa sang trang verify
+        if (!savedAvailableAt) return COOLDOWN_TIME_SECONDS;
 
         const remainingMs = Number(savedAvailableAt) - Date.now();
         const remainingSeconds = Math.ceil(remainingMs / 1000);
@@ -51,7 +54,11 @@ function ResendOtp({ email, setResponseMessage }: { email: string; setResponseMe
 
     const handlResendOtp = async () => {
         try {
-            await authServices.resendOtp({ email });
+            if (type === "reset_password") {
+                await authServices.resendPasswordOtp({ email });
+            } else {
+                await authServices.resendOtp({ email });
+            }
             setResponseMessage({ message: "OTP resent successfully", type: "success" });
             startCooldown(); // Đặt lại đếm ngược & lưu localStorage mới
             setTimeout(() => {

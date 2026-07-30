@@ -84,6 +84,32 @@ describe("ResendOtp Component", () => {
         });
     });
 
+    it("should call authServices.resendPasswordOtp on click when type is reset_password", async () => {
+        const pastTime = Date.now() - 1000;
+        localStorage.setItem(`otp_resend_${defaultEmail}`, pastTime.toString());
+
+        const resendPasswordSpy = jest.spyOn(authServices, "resendPasswordOtp").mockResolvedValueOnce({
+            status: "success",
+            message: "OTP resent successfully",
+        });
+
+        renderWithProviders(
+            <ResendOtp email={defaultEmail} setResponseMessage={mockSetResponseMessage} />,
+            { initialEntries: [`/verify-otp?email=${defaultEmail}&type=reset_password`] }
+        );
+
+        const resendBtn = screen.getByRole("button", { name: /resend/i });
+        await user.click(resendBtn);
+
+        await waitFor(() => {
+            expect(resendPasswordSpy).toHaveBeenCalledWith({ email: defaultEmail });
+            expect(mockSetResponseMessage).toHaveBeenCalledWith({
+                message: "OTP resent successfully",
+                type: "success",
+            });
+        });
+    });
+
     it("should display server error response when resendOtp API fails", async () => {
         const pastTime = Date.now() - 1000;
         localStorage.setItem(`otp_resend_${defaultEmail}`, pastTime.toString());

@@ -1,19 +1,25 @@
+export interface IUser {
+    id: string;
+    email: string;
+    full_name: string;
+    avatar?: string | null;
+    is_verified?: boolean;
+    auth_provider?: string;
+    created_at?: string;
+}
+
+export type ILoginUserData = IUser;
+export type ICompleteRegisterUserData = IUser;
+
 export interface loginPayload {
     email: string;
     password: string;
 }
 
-export interface ILoginUserData {
-    id: string;
-    email: string;
-    full_name: string;
-}
-
 export interface IApiLoginSuccess {
     status: "success";
     data: {
-        access_token: string;
-        user: ILoginUserData;
+        user: IUser;
     };
 }
 
@@ -61,3 +67,60 @@ export type IResendOtpPayload = Pick<IVerifyOtpPayload, "email">;
 export type IApiResendOtpSuccess = Omit<IApiRegisterSuccess, "data">;
 
 export type IApiResendOtpError = Omit<IApiRegisterError, "data">;
+
+export interface ICompleteRegisterPayload {
+    password: string;
+    confirm_password: string;
+}
+
+export interface IApiCompleteRegisterSuccess {
+    status: "success";
+    data: {
+        user: IUser;
+    };
+}
+
+export interface IApiCompleteRegisterError {
+    status: "error";
+    code: string;
+    message: string;
+}
+
+export type IForgotPasswordPayload = Pick<IRegisterPayload, "email">;
+
+export type IApiForgotPasswordSuccess = Omit<IApiRegisterSuccess, "data">;
+
+export type IApiForgotPasswordError = Omit<IApiRegisterError, "data">;
+
+export type IVerifyPasswordOtpPayload = IVerifyOtpPayload;
+
+export interface IApiVerifyPasswordOtpSuccess {
+    status: "success";
+    data: {
+        reset_token: string;
+    };
+}
+
+export type IApiVerifyPasswordOtpError = IApiVerifyOtpError;
+
+export type IResendPasswordOtpPayload = IResendOtpPayload;
+
+export type IApiResendPasswordOtpSuccess = IApiResendOtpSuccess;
+
+export type IResetPasswordPayload = ICompleteRegisterPayload;
+
+export type IApiResetPasswordSuccess = IApiRegisterSuccess;
+
+export type IApiResetPasswordError = IApiRegisterError;
+
+export interface IApiGetMeSuccess {
+    status: "success";
+    data: {
+        user: IUser;
+    };
+}
+
+export interface IApiRefreshTokenSuccess {
+    status: "success";
+    message: string;
+}
