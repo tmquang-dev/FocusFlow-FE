@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, jest, beforeEach, afterEach } from "@jest/globals";
-import "@testing-library/jest-dom/jest-globals";
+import { vi } from "vitest";
+
 
 // Import thêm fireEvent từ @/utils/test-utils (hoặc @testing-library/react)
 import { renderWithProviders, screen, waitFor, fireEvent } from "@/utils/test-utils";
@@ -13,11 +13,11 @@ describe("RegisterForm Component", () => {
 
     beforeEach(() => {
         user = userEvent.setup();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     // ==========================================
@@ -32,7 +32,7 @@ describe("RegisterForm Component", () => {
     });
 
     it("should call authServices.register when submitting valid email", async () => {
-        const registerSpy = jest.spyOn(authServices, "register").mockResolvedValueOnce({
+        const registerSpy = vi.spyOn(authServices, "register").mockResolvedValueOnce({
             status: "success",
             message: "OTP sent to email",
         });
@@ -79,7 +79,7 @@ describe("RegisterForm Component", () => {
     });
 
     it("should display required validation error when submitting empty form", async () => {
-        const registerSpy = jest.spyOn(authServices, "register");
+        const registerSpy = vi.spyOn(authServices, "register");
         renderWithProviders(<RegisterForm />);
 
         const submitBtn = screen.getByRole("button", { name: /register/i });
@@ -94,7 +94,7 @@ describe("RegisterForm Component", () => {
     // 3. UNHAPPY PATHS & API ERROR HANDLING
     // ==========================================
     it("should display server error message when registration fails", async () => {
-        jest.spyOn(authServices, "register").mockRejectedValueOnce({
+        vi.spyOn(authServices, "register").mockRejectedValueOnce({
             isAxiosError: true,
             response: { data: { message: "Email already registered" } },
         });
@@ -118,7 +118,7 @@ describe("RegisterForm Component", () => {
             resolvePromise = resolve;
         });
 
-        jest.spyOn(authServices, "register").mockReturnValueOnce(pendingPromise);
+        vi.spyOn(authServices, "register").mockReturnValueOnce(pendingPromise);
 
         renderWithProviders(<RegisterForm />);
 
