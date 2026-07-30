@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, jest, beforeEach, afterEach } from "@jest/globals";
-import "@testing-library/jest-dom/jest-globals";
+import { vi } from "vitest";
+
 
 import { renderWithProviders, screen, waitFor } from "@/utils/test-utils";
 import { authServices } from "@/api/services/authServices";
@@ -9,16 +9,16 @@ import ResendOtp from "./ResendOtp";
 describe("ResendOtp Component", () => {
     let user: ReturnType<typeof userEvent.setup>;
     const defaultEmail = "test@example.com";
-    const mockSetResponseMessage = jest.fn();
+    const mockSetResponseMessage = vi.fn();
 
     beforeEach(() => {
         user = userEvent.setup();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         localStorage.clear();
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
         localStorage.clear();
     });
 
@@ -62,7 +62,7 @@ describe("ResendOtp Component", () => {
         const pastTime = Date.now() - 1000;
         localStorage.setItem(`otp_resend_${defaultEmail}`, pastTime.toString());
 
-        const resendSpy = jest.spyOn(authServices, "resendOtp").mockResolvedValueOnce({
+        const resendSpy = vi.spyOn(authServices, "resendOtp").mockResolvedValueOnce({
             status: "success",
             message: "OTP resent successfully",
         });
@@ -88,7 +88,7 @@ describe("ResendOtp Component", () => {
         const pastTime = Date.now() - 1000;
         localStorage.setItem(`otp_resend_${defaultEmail}`, pastTime.toString());
 
-        const resendPasswordSpy = jest.spyOn(authServices, "resendPasswordOtp").mockResolvedValueOnce({
+        const resendPasswordSpy = vi.spyOn(authServices, "resendPasswordOtp").mockResolvedValueOnce({
             status: "success",
             message: "OTP resent successfully",
         });
@@ -114,7 +114,7 @@ describe("ResendOtp Component", () => {
         const pastTime = Date.now() - 1000;
         localStorage.setItem(`otp_resend_${defaultEmail}`, pastTime.toString());
 
-        jest.spyOn(authServices, "resendOtp").mockRejectedValueOnce({
+        vi.spyOn(authServices, "resendOtp").mockRejectedValueOnce({
             isAxiosError: true,
             response: { data: { message: "Too many requests", status: "error" } },
         });

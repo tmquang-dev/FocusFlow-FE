@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, jest, beforeEach, afterEach } from "@jest/globals";
-import "@testing-library/jest-dom/jest-globals";
+import { vi } from "vitest";
+
 
 import { renderWithProviders, screen, waitFor, fireEvent } from "@/utils/test-utils";
 import { authServices } from "@/api/services/authServices";
@@ -11,12 +11,12 @@ describe("ForgotPasswordForm Component", () => {
 
     beforeEach(() => {
         user = userEvent.setup();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         localStorage.clear();
     });
 
     afterEach(() => {
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
         localStorage.clear();
     });
 
@@ -38,7 +38,7 @@ describe("ForgotPasswordForm Component", () => {
     });
 
     it("should call authServices.forgotPassword when submitting valid email", async () => {
-        const forgotSpy = jest.spyOn(authServices, "forgotPassword").mockResolvedValueOnce({
+        const forgotSpy = vi.spyOn(authServices, "forgotPassword").mockResolvedValueOnce({
             status: "success",
             message: "Password reset OTP sent to email",
         });
@@ -60,7 +60,7 @@ describe("ForgotPasswordForm Component", () => {
     });
 
     it("should display server error message when forgotPassword API fails", async () => {
-        jest.spyOn(authServices, "forgotPassword").mockRejectedValueOnce({
+        vi.spyOn(authServices, "forgotPassword").mockRejectedValueOnce({
             isAxiosError: true,
             response: { data: { message: "Email not found", status: "error" } },
         });
