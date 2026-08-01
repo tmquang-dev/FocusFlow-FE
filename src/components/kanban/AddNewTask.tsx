@@ -1,13 +1,18 @@
 import { useState } from "react";
 import Button from "@/components/common/Button";
 import { AddTaskIcon } from "@/components/common/Icons";
+import { useAppDispatch } from "@/app/hooks";
+import { addTask } from "./kanbanSlice";
 
 function AddNewTask() {
     const [taskTitle, setTaskTitle] = useState("");
+    const dispatch = useAppDispatch();
 
-    const handleAddTask = (e: React.FormEvent) => {
+    const handleAddTask = (e: React.SubmitEvent) => {
         e.preventDefault();
-        console.log("Add Task Title:", taskTitle);
+        if (!taskTitle.trim()) return;
+        dispatch(addTask({ title: taskTitle.trim() }));
+        setTaskTitle("");
     };
 
     return (
