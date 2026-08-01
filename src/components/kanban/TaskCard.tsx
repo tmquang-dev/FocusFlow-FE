@@ -2,15 +2,29 @@ import { cn } from "@/utils/cn";
 import Button from "@/components/common/Button";
 import { ClockIcon, CrossIcon } from "@/components/common/Icons";
 import type { ColumnId } from "./kanban.types";
+import { useSortable } from "@dnd-kit/react/sortable";
+import { useAppDispatch } from "@/app/hooks";
+import { deleteTask } from "./kanbanSlice";
 
 interface TaskCardProps {
     status: ColumnId;
     id: string;
+    index?: number;
     title: string;
     desc?: string;
+    isOverlay?: boolean;
 }
 
-function TaskCard({ status, id, title, desc }: TaskCardProps) {
+function TaskCard({ status, id, index = 0, title, desc, isOverlay }: TaskCardProps) {
+    const dispatch = useAppDispatch();
+    const { ref, isDragging } = useSortable({
+        id,
+        index,
+        group: status,
+        data: { id, status, columnId: status, index },
+        disabled: isOverlay,
+    });
+
     const getCardProps = (colStatus: ColumnId) => {
         switch (colStatus) {
             case "backlog":
@@ -42,12 +56,20 @@ function TaskCard({ status, id, title, desc }: TaskCardProps) {
 
     const cardProps = getCardProps(status);
 
+    const handleDelete = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        dispatch(deleteTask(id));
+    };
+
     return (
         <article
+            ref={ref}
             className={cn(
-                "flex flex-col items-start gap-2.5 p-3 relative self-stretch w-full flex-[0_0_auto] rounded-lg overflow-hidden border-solid border-t border-r border-b-2 border-l-4 transition-colors cursor-pointer",
+                "flex flex-col items-start gap-2.5 p-3 relative self-stretch w-full flex-[0_0_auto] rounded-lg overflow-hidden border-solid border-t border-r border-b-2 border-l-4 transition-all cursor-grab active:cursor-grabbing select-none",
                 cardProps.cardClassName,
-                cardProps.shadowClassName
+                cardProps.shadowClassName,
+                isDragging && "opacity-40 scale-[0.98]",
+                isOverlay && "rotate-2 shadow-2xl scale-105"
             )}
         >
             <div className="flex items-center justify-between relative self-stretch w-full flex-[0_0_auto]">
@@ -64,8 +86,9 @@ function TaskCard({ status, id, title, desc }: TaskCardProps) {
                 <Button
                     aria-label="Remove task"
                     leftIcon={<CrossIcon className="relative w-2 h-2" />}
-                    className="p-2 text-text-on-yellow"
+                    className="p-2 text-text-on-yellow hover:bg-black/10 rounded"
                     variant="text"
+                    onClick={handleDelete}
                 />
             </div>
             <div className="flex flex-col items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
@@ -86,7 +109,7 @@ function TaskCard({ status, id, title, desc }: TaskCardProps) {
                 <>
                     <div className="relative self-stretch w-full h-px border border-solid border-border" />
                     <Button
-                        className="flex items-center justify-center gap-2.5 px-4 py-2 relative self-stretch w-full flex-[0_0_auto] bg-amber-600 rounded-lg hover:bg-amber-700 active:bg-amber-800 overflow-hidden"
+                        className="flex items-center justify-center gap-2.5 px-4 py-2 relative self-stretch w-full flex-[0_0_auto] bg-amber-600 rounded-lg hover:bg-amber-700 active:bg-amber-800 overflow-hidden text-text-on-yellow"
                         leftIcon={<ClockIcon className="relative w-4 h-4 text-text-on-yellow" />}
                     >
                         Start Focus
