@@ -1,9 +1,20 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useAppDispatch } from "@/app/hooks";
 import { updateTask } from "../../kanbanSlice";
 import type { ColumnId, Task } from "../../kanban.types";
 import TaskStatusSelect from "./TaskStatusSelect";
 import TaskDetailFooter from "./TaskDetailFooter";
+import InputField from "@/components/common/InputField";
+
+const taskDetailSchema = z.object({
+    title: z.string().trim().min(1, "Title is required"),
+    desc: z.string().optional(),
+    status: z.enum(["backlog", "todo", "in_progress", "done"] as const),
+});
+
+export type TaskDetailSchema = z.infer<typeof taskDetailSchema>;
 
 interface TaskDetailFormProps {
     task: Task;
@@ -12,67 +23,74 @@ interface TaskDetailFormProps {
 
 function TaskDetailForm({ task, onClose }: TaskDetailFormProps) {
     const dispatch = useAppDispatch();
-    const [title, setTitle] = useState(task.title);
-    const [desc, setDesc] = useState(task.desc ?? "");
-    const [status, setStatus] = useState<ColumnId>(task.columnId);
 
-    const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (!title.trim()) return;
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        watch,
+        formState: { errors },
+    } = useForm<TaskDetailSchema>({
+        resolver: zodResolver(taskDetailSchema),
+        defaultValues: {
+            title: task.title,
+            desc: task.desc ?? "",
+            status: task.columnId,
+        },
+        mode: "onChange",
+    });
 
+    const currentStatus = watch("status");
+
+    const onSubmit = (data: TaskDetailSchema) => {
         dispatch(
             updateTask({
                 id: task.id,
-                title: title.trim(),
-                desc: desc.trim(),
-                columnId: status,
+                title: data.title.trim(),
+                desc: data.desc?.trim() ?? "",
+                columnId: data.status,
             })
         );
         onClose();
     };
 
     return (
-        <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-            <TaskStatusSelect onChange={setStatus} status={status} />
+        <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
+            <TaskStatusSelect
+                onChange={(newStatus: ColumnId) => {
+                    setValue("status", newStatus, { shouldValidate: true });
+                }}
+                status={currentStatus}
+            />
 
-            {/* Title */}
-            <div className="flex flex-col gap-2">
-                <label
-                    className="text-xs font-bold uppercase tracking-wider text-text-placeholder"
-                    htmlFor="task-title"
-                >
-                    Title
-                </label>
-                <input
-                    className="w-full px-4 py-2.5 bg-background-main border border-border rounded-lg text-text-main font-text-h3medium focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    id="task-title"
-                    onChange={(e) => {
-                        setTitle(e.target.value);
-                    }}
-                    placeholder="Enter task title..."
-                    type="text"
-                    value={title}
-                />
-            </div>
+            {/* Title using reusable InputField */}
+            <InputField
+                error={errors.title?.message}
+                label="Title"
+                placeholder="Enter task title..."
+                {...register("title")}
+            />
 
             {/* Description */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col w-full items-start gap-2.5 relative">
                 <label
-                    className="text-xs font-bold uppercase tracking-wider text-text-placeholder"
+                    className="text-text-secondary text-[12px] font-medium leading-4 uppercase tracking-wide select-none cursor-pointer"
                     htmlFor="task-desc"
                 >
                     Description
                 </label>
                 <textarea
-                    className="w-full min-h-28 px-4 py-2.5 bg-background-main border border-border rounded-lg text-text-main font-text-default focus:outline-none focus:ring-2 focus:ring-primary-500 resize-y"
+                    className="w-full min-h-28 bg-gray-100 border border-border rounded-lg px-3.5 py-2 text-sm text-text-main leading-5 placeholder:text-text-placeholder outline-none focus:border-primary-600 focus:ring-2 focus:ring-primary-600/20 transition-all duration-200 resize-y"
                     id="task-desc"
-                    onChange={(e) => {
-                        setDesc(e.target.value);
-                    }}
                     placeholder="Enter detailed description..."
                     rows={4}
-                    value={desc}
+                    {...register("desc")}
                 />
+                {errors.desc?.message && (
+                    <span className="font-text-small text-red-500 mt-1 select-none">
+                        {errors.desc.message}
+                    </span>
+                )}
             </div>
 
             <TaskDetailFooter onCancel={onClose} />
