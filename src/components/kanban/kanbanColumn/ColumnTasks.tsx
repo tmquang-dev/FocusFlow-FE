@@ -1,5 +1,5 @@
-import TaskCard from "./TaskCard";
-import type { ColumnId } from "./kanban.types";
+import TaskCard from "../taskCard/TaskCard";
+import type { ColumnId } from "../kanban.types";
 import { useAppSelector } from "@/app/hooks";
 import { useDroppable } from "@dnd-kit/react";
 import { cn } from "@/utils/cn";

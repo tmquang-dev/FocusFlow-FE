@@ -1,4 +1,4 @@
-import AddNewTask from "@/components/kanban/AddNewTask";
+import AddNewTask from "@/components/kanban/addNewTask/AddNewTask";
 import KanbanBoard from "@/components/kanban/KanbanBoard";
 
 function Home() {
