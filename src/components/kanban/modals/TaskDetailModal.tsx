@@ -29,6 +29,14 @@ function TaskDetailModalContent({ taskId }: { taskId: string }) {
         };
     }, [dispatch]);
 
+    useEffect(() => {
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = originalOverflow;
+        };
+    }, []);
+
     if (!task) return null;
 
     const handleClose = () => {
@@ -62,7 +70,7 @@ function TaskDetailModalContent({ taskId }: { taskId: string }) {
                 onClick={handleClose}
             />
 
-            <div className="relative w-full max-w-xl bg-background-secondary-0 border border-border rounded-2xl shadow-2xl p-6 flex flex-col gap-6 z-10 overflow-hidden">
+            <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto custom-scrollbar bg-background-secondary-0 border border-border rounded-2xl shadow-2xl p-6 flex flex-col gap-6 z-10">
                 <TaskDetailHeader
                     onClose={handleClose}
                     onDelete={handleDelete}
