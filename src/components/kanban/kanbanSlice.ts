@@ -56,8 +56,8 @@ export const kanbanSlice = createSlice({
                 id: `T-${String(nextIdNumber++).padStart(3, "0")}`,
                 title: action.payload.title,
                 desc: action.payload.desc,
-                columnId: action.payload.columnId || "backlog",
-                order: state.tasks.filter((t) => t.columnId === (action.payload.columnId || "backlog")).length + 1,
+                columnId: action.payload.columnId ?? "backlog",
+                order: state.tasks.filter((t) => t.columnId === (action.payload.columnId ?? "backlog")).length + 1,
             };
             state.tasks.push(newTask);
         },
@@ -114,9 +114,45 @@ export const kanbanSlice = createSlice({
                 });
             }
         },
+        updateTask: (
+            state,
+            action: PayloadAction<{
+                id: string;
+                title: string;
+                desc?: string;
+                columnId: ColumnId;
+            }>
+        ) => {
+            const { id, title, desc, columnId } = action.payload;
+            const task = state.tasks.find((t) => t.id === id);
+            if (!task) return;
+
+            const oldColumnId = task.columnId;
+            task.title = title;
+            task.desc = desc;
+
+            if (oldColumnId !== columnId) {
+                task.columnId = columnId;
+
+                const targetTasks = state.tasks
+                    .filter((t) => t.columnId === columnId && t.id !== id)
+                    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+                targetTasks.push(task);
+                targetTasks.forEach((t, idx) => {
+                    t.order = idx + 1;
+                });
+
+                const sourceTasks = state.tasks
+                    .filter((t) => t.columnId === oldColumnId && t.id !== id)
+                    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+                sourceTasks.forEach((t, idx) => {
+                    t.order = idx + 1;
+                });
+            }
+        },
     },
 });
 
-export const { addTask, deleteTask, setActiveTask, moveTask } = kanbanSlice.actions;
+export const { addTask, deleteTask, setActiveTask, moveTask, updateTask } = kanbanSlice.actions;
 
 export default kanbanSlice.reducer;
