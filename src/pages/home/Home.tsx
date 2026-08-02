@@ -1,5 +1,5 @@
-import AddNewTask from "@/components/home/addNewTask/AddNewTask"
-import KanbanBoard from "@/components/home/kanbanBoard/KanbanBoard"
+import AddNewTask from "@/components/kanban/addNewTask/AddNewTask";
+import KanbanBoard from "@/components/kanban/KanbanBoard";
 
 function Home() {
     return (
@@ -7,7 +7,7 @@ function Home() {
             <AddNewTask />
             <KanbanBoard />
         </div>
-    )
+    );
 }
 
-export default Home
+export default Home;
