@@ -2,13 +2,13 @@ import { useState } from "react";
 import Button from "@/components/common/Button";
 import { AddTaskIcon } from "@/components/common/Icons";
 import { useAppDispatch } from "@/app/hooks";
-import { addTask } from "./kanbanSlice";
+import { addTask } from "../kanbanSlice";
 
 function AddNewTask() {
     const [taskTitle, setTaskTitle] = useState("");
     const dispatch = useAppDispatch();
 
-    const handleAddTask = (e: React.SubmitEvent) => {
+    const handleAddTask = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!taskTitle.trim()) return;
         dispatch(addTask({ title: taskTitle.trim() }));
@@ -33,7 +33,9 @@ function AddNewTask() {
             <input
                 className="relative min-w-0 flex-1 pl-12 pr-3 py-3.5 font-text-default text-text-main placeholder:text-text-placeholder outline-none"
                 id="new-task"
-                onChange={(event) => setTaskTitle(event.target.value)}
+                onChange={(event) => {
+                    setTaskTitle(event.target.value);
+                }}
                 placeholder="Add a new task to Backlog..."
                 type="text"
                 value={taskTitle}

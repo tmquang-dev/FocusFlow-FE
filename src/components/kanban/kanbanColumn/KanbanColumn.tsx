@@ -1,6 +1,6 @@
 import ColumnHeader from "./ColumnHeader";
 import ColumnTasks from "./ColumnTasks";
-import type { ColumnId } from "./kanban.types";
+import type { ColumnId } from "../kanban.types";
 import { useAppSelector } from "@/app/hooks";
 
 interface KanbanColumnProps {
