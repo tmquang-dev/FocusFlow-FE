@@ -30,12 +30,12 @@ export interface DndSource {
 }
 
 export interface DndOperation {
-    source?: DndSource;
-    target?: DndTarget;
+    source?: DndSource | null;
+    target?: DndTarget | null;
 }
 
 export interface DndEvent {
-    operation?: DndOperation;
-    source?: DndSource;
-    target?: DndTarget;
+    operation?: DndOperation | null;
+    source?: DndSource | null;
+    target?: DndTarget | null;
 }
