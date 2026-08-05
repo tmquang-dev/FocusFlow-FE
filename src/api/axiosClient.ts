@@ -40,7 +40,7 @@ axiosClient.interceptors.response.use(
     },
     async (error: unknown) => {
         if (axios.isAxiosError(error) && error.config && error.response) {
-            const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
+            const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean; _skipRetry?: boolean };
             const status = error.response.status;
 
             const isAuthEndpoint =
@@ -50,7 +50,7 @@ axiosClient.interceptors.response.use(
                 (originalRequest.url?.includes('/v1/auth/password') ?? false);
 
             // Xử lý 401 với Token Hết hạn (INVALID_ACCESS_TOKEN hoặc 401 trên API thông thường)
-            if (status === 401 && !originalRequest._retry && !isAuthEndpoint) {
+            if (status === 401 && !originalRequest._retry && !isAuthEndpoint && !originalRequest._skipRetry) {
                 if (isRefreshing) {
                     return new Promise((resolve, reject) => {
                         failedQueue.push({ resolve, reject });
