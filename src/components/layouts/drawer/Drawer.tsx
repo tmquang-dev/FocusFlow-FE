@@ -116,15 +116,15 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
                                                     ? "bg-primary-100 text-primary-700 font-semibold"
                                                     : "text-text-main hover:bg-gray-100 active:bg-gray-200"
                                                     }`}
-                                                onClick={() => handleSelectWorkspace(ws.id)}
-                                                onDoubleClick={() => setEditingWorkspaceId(ws.id)}
+                                                onClick={() => { handleSelectWorkspace(ws.id); }}
+                                                onDoubleClick={() => { setEditingWorkspaceId(ws.id); }}
                                             >
                                                 {isEditing ? (
                                                     <InlineWorkspaceRenameInput
                                                         workspaceId={ws.id}
                                                         initialName={ws.name}
-                                                        onCancel={() => setEditingWorkspaceId(null)}
-                                                        onSuccess={() => setEditingWorkspaceId(null)}
+                                                        onCancel={() => { setEditingWorkspaceId(null); }}
+                                                        onSuccess={() => { setEditingWorkspaceId(null); }}
                                                     />
                                                 ) : (
                                                     <span className="truncate flex-1 text-left">{ws.name}</span>
@@ -154,7 +154,7 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
                                 variant="outlined"
                                 leftIcon={<PlusIcon />}
                                 className="w-full font-text-medium active:bg-primary-200"
-                                onClick={() => setIsCreateModalOpen(true)}
+                                onClick={() => { setIsCreateModalOpen(true); }}
                             >
                                 Create Workspace
                             </Button>
@@ -166,7 +166,7 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
             {/* Modal rendered via React createPortal */}
             <CreateWorkspaceModal
                 isOpen={isCreateModalOpen}
-                onClose={() => setIsCreateModalOpen(false)}
+                onClose={() => { setIsCreateModalOpen(false); }}
             />
         </>,
         document.body

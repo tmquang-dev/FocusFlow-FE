@@ -64,11 +64,11 @@ export default function InlineWorkspaceRenameInput({
             ref={inputRef}
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
-            onBlur={() => void handleSave()}
+            onChange={(e) => { setName(e.target.value); }}
+            onBlur={() => { void handleSave(); }}
             onKeyDown={handleKeyDown}
-            onClick={(e) => e.stopPropagation()}
-            onDoubleClick={(e) => e.stopPropagation()}
+            onClick={(e) => { e.stopPropagation(); }}
+            onDoubleClick={(e) => { e.stopPropagation(); }}
             className="w-full h-5 py-0 text-sm font-medium text-text-main outline-none flex-1 min-w-0"
         />
     );

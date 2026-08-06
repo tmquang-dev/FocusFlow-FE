@@ -76,7 +76,7 @@ const workspaceSlice = createSlice({
             })
             .addCase(fetchWorkspacesThunk.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = (action.payload as string) ?? "Failed to fetch workspaces";
+                state.error = (action.payload as string | undefined) ?? "Failed to fetch workspaces";
             })
             // Create Workspace
             .addCase(createWorkspaceThunk.pending, (state) => {
@@ -95,7 +95,7 @@ const workspaceSlice = createSlice({
             })
             .addCase(createWorkspaceThunk.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = (action.payload as string) ?? "Failed to create workspace";
+                state.error = (action.payload as string | undefined) ?? "Failed to create workspace";
             })
             // Rename Workspace
             .addCase(renameWorkspaceThunk.pending, (state) => {
@@ -111,7 +111,7 @@ const workspaceSlice = createSlice({
             })
             .addCase(renameWorkspaceThunk.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = (action.payload as string) ?? "Failed to rename workspace";
+                state.error = (action.payload as string | undefined) ?? "Failed to rename workspace";
             });
     },
 });
