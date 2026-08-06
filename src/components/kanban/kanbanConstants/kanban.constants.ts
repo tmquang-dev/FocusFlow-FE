@@ -6,10 +6,10 @@ export interface ColumnConfig {
 }
 
 export const KANBAN_COLUMNS: ColumnConfig[] = [
-    { status: "backlog", label: "BACKLOG" },
-    { status: "todo", label: "TO DO" },
-    { status: "in_progress", label: "IN PROGRESS" },
-    { status: "done", label: "DONE" },
+    { status: "BACKLOG", label: "BACKLOG" },
+    { status: "TO_DO", label: "TO DO" },
+    { status: "IN_PROGRESS", label: "IN PROGRESS" },
+    { status: "DONE", label: "DONE" },
 ];
 
 export interface StatusTheme {
@@ -24,7 +24,7 @@ export interface StatusTheme {
 }
 
 export const STATUS_THEMES: Record<ColumnId, StatusTheme> = {
-    backlog: {
+    BACKLOG: {
         label: "BACKLOG",
         headerClass: "bg-gray-100 border-gray-900 border-solid border-t border-r border-b-2 border-l-2",
         countClass: "text-gray-900",
@@ -34,7 +34,7 @@ export const STATUS_THEMES: Record<ColumnId, StatusTheme> = {
         modalBadgeClass: "bg-gray-100 text-gray-800 border-gray-300",
         modalActiveClass: "ring-2 ring-gray-600 bg-gray-200 text-gray-900",
     },
-    todo: {
+    TO_DO: {
         label: "TO DO",
         headerClass: "bg-primary-100 border-primary-700 border-solid border-t border-r border-b-2 border-l-2",
         countClass: "text-primary-600",
@@ -44,7 +44,7 @@ export const STATUS_THEMES: Record<ColumnId, StatusTheme> = {
         modalBadgeClass: "bg-primary-100 text-primary-700 border-primary-300",
         modalActiveClass: "ring-2 ring-primary-600 bg-primary-200 text-primary-900",
     },
-    in_progress: {
+    IN_PROGRESS: {
         label: "IN PROGRESS",
         headerClass: "bg-amber-100 border-amber-900 border-solid border-t border-r border-b-2 border-l-2",
         countClass: "text-amber-600",
@@ -54,7 +54,7 @@ export const STATUS_THEMES: Record<ColumnId, StatusTheme> = {
         modalBadgeClass: "bg-amber-100 text-amber-800 border-amber-300",
         modalActiveClass: "ring-2 ring-amber-600 bg-amber-200 text-amber-900",
     },
-    done: {
+    DONE: {
         label: "DONE",
         headerClass: "bg-green-100 border-green-900 border-solid border-t border-r border-b-2 border-l-2",
         countClass: "text-green-600",

@@ -1,4 +1,4 @@
-export type ColumnId = "backlog" | "todo" | "in_progress" | "done";
+export type ColumnId = "BACKLOG" | "TO_DO" | "IN_PROGRESS" | "DONE";
 
 export interface Task {
     id: string;

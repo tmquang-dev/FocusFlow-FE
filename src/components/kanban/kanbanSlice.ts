@@ -11,28 +11,28 @@ const initialTasks: Task[] = [
         id: "T-001",
         title: "Implement User Authentication System",
         desc: "Develop and integrate secure user authentication for the web application.",
-        columnId: "backlog",
+        columnId: "BACKLOG",
         order: 1,
     },
     {
         id: "T-002",
         title: "Design Kanban UI Layout",
         desc: "Create responsive Kanban board layout with Tailwind CSS.",
-        columnId: "todo",
+        columnId: "TO_DO",
         order: 1,
     },
     {
         id: "T-003",
         title: "Setup Redux Toolkit Store",
         desc: "Configure RTK store and slices for application state management.",
-        columnId: "in_progress",
+        columnId: "IN_PROGRESS",
         order: 1,
     },
     {
         id: "T-004",
         title: "Initialize React Project with Vite",
         desc: "Project scaffolding completed using Vite, TypeScript, and React 19.",
-        columnId: "done",
+        columnId: "DONE",
         order: 1,
     },
 ];
@@ -56,8 +56,8 @@ export const kanbanSlice = createSlice({
                 id: `T-${String(nextIdNumber++).padStart(3, "0")}`,
                 title: action.payload.title,
                 desc: action.payload.desc,
-                columnId: action.payload.columnId ?? "backlog",
-                order: state.tasks.filter((t) => t.columnId === (action.payload.columnId ?? "backlog")).length + 1,
+                columnId: action.payload.columnId ?? "BACKLOG",
+                order: state.tasks.filter((t) => t.columnId === (action.payload.columnId ?? "BACKLOG")).length + 1,
             };
             state.tasks.push(newTask);
         },

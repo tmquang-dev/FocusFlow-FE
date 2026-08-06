@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from "react";
 import type { RouteObject } from "react-router";
 import MainLayout from "../components/layouts/MainLayout";
