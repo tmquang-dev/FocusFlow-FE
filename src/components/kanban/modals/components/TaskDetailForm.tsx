@@ -40,6 +40,7 @@ function TaskDetailForm({ task, onClose }: TaskDetailFormProps) {
         mode: "onChange",
     });
 
+    // eslint-disable-next-line react-hooks/incompatible-library
     const currentStatus = watch("status");
 
     const onSubmit = (data: TaskDetailSchema) => {
@@ -55,7 +56,7 @@ function TaskDetailForm({ task, onClose }: TaskDetailFormProps) {
     };
 
     return (
-        <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-5" onSubmit={(e) => { void handleSubmit(onSubmit)(e); }}>
             <TaskStatusSelect
                 onChange={(newStatus: ColumnId) => {
                     setValue("status", newStatus, { shouldValidate: true });
