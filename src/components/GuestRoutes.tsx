@@ -3,10 +3,12 @@ import { useAppSelector } from "@/app/hooks";
 
 export default function GuestRoutes() {
     const user = useAppSelector((state) => state.profile.user);
+    const isInitializing = useAppSelector((state) => state.profile.isInitializing);
 
-    if (user) {
+    if (!isInitializing && user) {
         return <Navigate to="/" replace />;
     }
 
     return <Outlet />;
 }
+

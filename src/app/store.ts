@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import profileReducer from "@/components/profile/profileSlice";
 import kanbanReducer from "@/components/kanban/kanbanSlice";
+import workspaceReducer from "@/components/workspace/workspaceSlice";
 
 const rootReducer = combineReducers({
     profile: profileReducer,
     kanban: kanbanReducer,
+    workspace: workspaceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

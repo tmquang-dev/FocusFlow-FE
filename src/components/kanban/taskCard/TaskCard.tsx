@@ -84,7 +84,7 @@ function TaskCard({ status, id, index = 0, title, desc, isOverlay }: TaskCardPro
                     </div>
                 )}
             </div>
-            {status === "in_progress" && (
+            {status === "IN_PROGRESS" && (
                 <>
                     <div className="relative self-stretch w-full h-px border border-solid border-border" />
                     <Button

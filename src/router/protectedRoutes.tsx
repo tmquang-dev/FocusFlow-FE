@@ -1,10 +1,14 @@
+/* eslint-disable react-refresh/only-export-components */
+import { lazy, Suspense } from "react";
 import type { RouteObject } from "react-router";
 import MainLayout from "../components/layouts/MainLayout";
-import Home from "../pages/home/Home";
 import ProtectedRoutes from "../components/ProtectedRoutes";
+import PageFallback from "@/components/common/PageFallback";
 
-export const protectedRoutes: RouteObject =
-{
+const Home = lazy(() => import("../pages/home/Home"));
+
+
+export const protectedRoutes: RouteObject = {
     element: <ProtectedRoutes />,
     children: [
         {
@@ -13,9 +17,13 @@ export const protectedRoutes: RouteObject =
             children: [
                 {
                     index: true,
-                    element: <Home />
+                    element: (
+                        <Suspense fallback={<PageFallback />}>
+                            <Home />
+                        </Suspense>
+                    ),
                 },
-            ]
-        }
-    ]
-}
+            ],
+        },
+    ],
+};
