@@ -11,7 +11,7 @@ import InputField from "@/components/common/InputField";
 const taskDetailSchema = z.object({
     title: z.string().trim().min(1, "Title is required"),
     desc: z.string().optional(),
-    status: z.enum(["backlog", "todo", "in_progress", "done"] as const),
+    status: z.enum(["BACKLOG", "TO_DO", "IN_PROGRESS", "DONE"] as const),
 });
 
 export type TaskDetailSchema = z.infer<typeof taskDetailSchema>;
