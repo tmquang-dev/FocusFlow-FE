@@ -2,6 +2,7 @@ export type ColumnId = "BACKLOG" | "TO_DO" | "IN_PROGRESS" | "DONE";
 
 export interface Task {
     id: string;
+    task_num?: number;
     title: string;
     desc?: string;
     columnId: ColumnId;

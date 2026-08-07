@@ -39,3 +39,8 @@ export interface IApiTaskSuccess {
         task: IBackendTask;
     };
 }
+
+export interface IApiDeleteTaskSuccess {
+    status: "success";
+    message: string;
+}

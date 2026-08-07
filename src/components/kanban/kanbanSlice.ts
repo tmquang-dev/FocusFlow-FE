@@ -1,73 +1,46 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { toast } from "sonner";
 import type { ColumnId, Task } from "./kanban.types";
+import type { IBackendTask } from "@/api/services/kanbanServices.type";
+import {
+    fetchTasksThunk,
+    quickAddTaskThunk,
+    moveTaskThunk,
+    updateTaskDetailThunk,
+    deleteTaskThunk,
+} from "./kanbanThunks";
 
 export interface KanbanState {
     tasks: Task[];
     activeTaskId: string | null;
+    isLoading: boolean;
+    error: string | null;
 }
 
-const initialTasks: Task[] = [
-    {
-        id: "T-001",
-        title: "Implement User Authentication System",
-        desc: "Develop and integrate secure user authentication for the web application.",
-        columnId: "BACKLOG",
-        order: 1,
-    },
-    {
-        id: "T-002",
-        title: "Design Kanban UI Layout",
-        desc: "Create responsive Kanban board layout with Tailwind CSS.",
-        columnId: "TO_DO",
-        order: 1,
-    },
-    {
-        id: "T-003",
-        title: "Setup Redux Toolkit Store",
-        desc: "Configure RTK store and slices for application state management.",
-        columnId: "IN_PROGRESS",
-        order: 1,
-    },
-    {
-        id: "T-004",
-        title: "Initialize React Project with Vite",
-        desc: "Project scaffolding completed using Vite, TypeScript, and React 19.",
-        columnId: "DONE",
-        order: 1,
-    },
-];
+const mapBackendTaskToTask = (bt: IBackendTask): Task => ({
+    id: bt.id,
+    task_num: bt.task_num,
+    title: bt.title,
+    desc: bt.description,
+    columnId: bt.status,
+    order: bt.order,
+});
 
 const initialState: KanbanState = {
-    tasks: initialTasks,
+    tasks: [],
     activeTaskId: null,
+    isLoading: false,
+    error: null,
 };
-
-let nextIdNumber = 5;
 
 export const kanbanSlice = createSlice({
     name: "kanban",
     initialState,
     reducers: {
-        addTask: (
-            state,
-            action: PayloadAction<{ title: string; desc?: string; columnId?: ColumnId }>
-        ) => {
-            const newTask: Task = {
-                id: `T-${String(nextIdNumber++).padStart(3, "0")}`,
-                title: action.payload.title,
-                desc: action.payload.desc,
-                columnId: action.payload.columnId ?? "BACKLOG",
-                order: state.tasks.filter((t) => t.columnId === (action.payload.columnId ?? "BACKLOG")).length + 1,
-            };
-            state.tasks.push(newTask);
-        },
-        deleteTask: (state, action: PayloadAction<string>) => {
-            state.tasks = state.tasks.filter((task) => task.id !== action.payload);
-        },
         setActiveTask: (state, action: PayloadAction<string | null>) => {
             state.activeTaskId = action.payload;
         },
-        moveTask: (
+        moveTaskOptimistic: (
             state,
             action: PayloadAction<{
                 activeId: string;
@@ -85,14 +58,18 @@ export const kanbanSlice = createSlice({
             // 1. Update task's columnId
             task.columnId = targetColumnId;
 
-            // 2. Get all tasks for targetColumnId excluding the current task
+            // 2. Get all tasks for targetColumnId excluding current task
             const otherTargetTasks = state.tasks
                 .filter((t) => t.columnId === targetColumnId && t.id !== activeId)
                 .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
             // 3. Determine insert position
             let insertIndex = otherTargetTasks.length;
-            if (typeof targetIndex === "number" && targetIndex >= 0 && targetIndex <= otherTargetTasks.length) {
+            if (
+                typeof targetIndex === "number" &&
+                targetIndex >= 0 &&
+                targetIndex <= otherTargetTasks.length
+            ) {
                 insertIndex = targetIndex;
             }
 
@@ -114,45 +91,106 @@ export const kanbanSlice = createSlice({
                 });
             }
         },
-        updateTask: (
-            state,
-            action: PayloadAction<{
-                id: string;
-                title: string;
-                desc?: string;
-                columnId: ColumnId;
-            }>
-        ) => {
-            const { id, title, desc, columnId } = action.payload;
-            const task = state.tasks.find((t) => t.id === id);
-            if (!task) return;
-
-            const oldColumnId = task.columnId;
-            task.title = title;
-            task.desc = desc;
-
-            if (oldColumnId !== columnId) {
-                task.columnId = columnId;
-
-                const targetTasks = state.tasks
-                    .filter((t) => t.columnId === columnId && t.id !== id)
-                    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-                targetTasks.push(task);
-                targetTasks.forEach((t, idx) => {
-                    t.order = idx + 1;
-                });
-
-                const sourceTasks = state.tasks
-                    .filter((t) => t.columnId === oldColumnId && t.id !== id)
-                    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-                sourceTasks.forEach((t, idx) => {
-                    t.order = idx + 1;
-                });
-            }
+        deleteTask: (state, action: PayloadAction<string>) => {
+            state.tasks = state.tasks.filter((task) => task.id !== action.payload);
         },
+        clearKanbanState: (state) => {
+            state.tasks = [];
+            state.activeTaskId = null;
+            state.isLoading = false;
+            state.error = null;
+        },
+    },
+    extraReducers: (builder) => {
+        builder
+            // Fetch Tasks
+            .addCase(fetchTasksThunk.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(fetchTasksThunk.fulfilled, (state, action: PayloadAction<IBackendTask[]>) => {
+                state.isLoading = false;
+                state.tasks = action.payload.map(mapBackendTaskToTask);
+            })
+            .addCase(fetchTasksThunk.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = (action.payload as string | undefined) ?? "Failed to fetch tasks";
+            })
+            // Quick Add Task
+            .addCase(quickAddTaskThunk.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(quickAddTaskThunk.fulfilled, (state, action: PayloadAction<IBackendTask>) => {
+                state.isLoading = false;
+                state.tasks.push(mapBackendTaskToTask(action.payload));
+                toast.success("Task created successfully!");
+            })
+            .addCase(quickAddTaskThunk.rejected, (state, action) => {
+                state.isLoading = false;
+                const errorMsg = (action.payload as string | undefined) ?? "Failed to create task";
+                state.error = errorMsg;
+                toast.error(errorMsg);
+            })
+            // Move Task (Rollback on rejection)
+            .addCase(moveTaskThunk.fulfilled, (state, action) => {
+                const updatedTask = mapBackendTaskToTask(action.payload.task);
+                const index = state.tasks.findIndex((t) => t.id === updatedTask.id);
+                if (index !== -1) {
+                    state.tasks[index] = updatedTask;
+                }
+            })
+            .addCase(moveTaskThunk.rejected, (state, action) => {
+                const payload = action.payload as { message: string; previousTasksSnapshot: Task[] } | undefined;
+                if (payload?.previousTasksSnapshot) {
+                    state.tasks = payload.previousTasksSnapshot;
+                }
+                const errorMsg = payload?.message ?? "Failed to move task. Position restored.";
+                state.error = errorMsg;
+                toast.error(errorMsg);
+            })
+            // Update Task Detail
+            .addCase(updateTaskDetailThunk.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(updateTaskDetailThunk.fulfilled, (state, action: PayloadAction<IBackendTask>) => {
+                state.isLoading = false;
+                const updatedTask = mapBackendTaskToTask(action.payload);
+                const index = state.tasks.findIndex((t) => t.id === updatedTask.id);
+                if (index !== -1) {
+                    state.tasks[index] = updatedTask;
+                }
+                toast.success("Task details updated successfully!");
+            })
+            .addCase(updateTaskDetailThunk.rejected, (state, action) => {
+                state.isLoading = false;
+                const errorMsg = (action.payload as string | undefined) ?? "Failed to update task";
+                state.error = errorMsg;
+                toast.error(errorMsg);
+            })
+            // Delete Task
+            .addCase(deleteTaskThunk.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(deleteTaskThunk.fulfilled, (state, action: PayloadAction<string>) => {
+                state.isLoading = false;
+                state.tasks = state.tasks.filter((t) => t.id !== action.payload);
+                if (state.activeTaskId === action.payload) {
+                    state.activeTaskId = null;
+                }
+                toast.success("Task deleted successfully.");
+            })
+            .addCase(deleteTaskThunk.rejected, (state, action) => {
+                state.isLoading = false;
+                const errorMsg = (action.payload as string | undefined) ?? "Failed to delete task";
+                state.error = errorMsg;
+                toast.error(errorMsg);
+            });
     },
 });
 
-export const { addTask, deleteTask, setActiveTask, moveTask, updateTask } = kanbanSlice.actions;
+export const { setActiveTask, moveTaskOptimistic, deleteTask, clearKanbanState } = kanbanSlice.actions;
 
 export default kanbanSlice.reducer;
