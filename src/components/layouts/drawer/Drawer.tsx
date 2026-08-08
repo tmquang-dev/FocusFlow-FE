@@ -33,9 +33,9 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
     // 2. Sync URL search param ?workspace=id with Redux activeWorkspaceId
     useEffect(() => {
         const urlWorkspaceId = searchParams.get("workspace");
-        if (urlWorkspaceId && urlWorkspaceId !== activeWorkspaceId) {
+        if (urlWorkspaceId !== activeWorkspaceId) {
             dispatch(setActiveWorkspaceId(urlWorkspaceId));
-        } else if (!urlWorkspaceId && activeWorkspaceId) {
+        } else if (activeWorkspaceId) {
             setSearchParams({ workspace: activeWorkspaceId }, { replace: true });
         }
     }, [searchParams, activeWorkspaceId, dispatch, setSearchParams]);
@@ -59,7 +59,6 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
     }, [isOpen, onClose]);
 
     const handleSelectWorkspace = (id: string) => {
-        dispatch(setActiveWorkspaceId(id));
         setSearchParams({ workspace: id });
     };
 
