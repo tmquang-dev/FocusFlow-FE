@@ -42,8 +42,8 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
             // Redux -> local storage -> first workspace
             const savedId = localStorage.getItem("focusflow_active_workspace");
             const fallbackId =
-                activeWorkspaceId ||
-                savedId ||
+                activeWorkspaceId ??
+                savedId ??
                 (workspaces.length > 0 ? workspaces[0].id : null);
             if (fallbackId) {
                 // automatically fill URL param without extra history

@@ -9,7 +9,7 @@ import { STATUS_THEMES } from "../kanbanConstants/kanban.constants";
 
 interface TaskCardProps {
     status: ColumnId;
-    task_num: number;
+    task_num: string;
     id: string;
     index?: number;
     title: string;
@@ -62,7 +62,7 @@ function TaskCard({ status, id, index = 0, title, desc, isOverlay, task_num }: T
                     <span className={cn("-mt-px font-text-id text-text-on-branch", theme.badgeClass)}>
                         {`#${task_num}`}
                     </span>
-                </span> 
+                </span>
                 <Button
                     aria-label="Remove task"
                     className="p-2 text-text-on-yellow hover:bg-black/10 rounded"

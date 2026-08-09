@@ -34,6 +34,7 @@ function KanbanBoard() {
                         id={activeTask.id}
                         isOverlay
                         status={activeTask.columnId}
+                        task_num={activeTask.task_num}
                         title={activeTask.title}
                     />
                 ) : null}

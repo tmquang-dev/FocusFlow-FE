@@ -2,7 +2,7 @@ import type { ColumnId } from "@/components/kanban/kanban.types";
 
 export interface IBackendTask {
     id: string;
-    task_num: number;
+    task_num: string;
     title: string;
     description?: string;
     status: ColumnId;
