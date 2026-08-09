@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useSearchParams } from "react-router";
 import Button from "@/components/common/Button";
-import { CircleSmallIcon, CrossIcon, LogoIcon, PlusIcon } from "@/components/common/Icons";
+import { CircleSmallIcon, CrossIcon, LogoIcon, PlusIcon, PencilIcon, TrashIcon } from "@/components/common/Icons";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { setActiveWorkspaceId } from "@/components/workspace/workspaceSlice";
-import { fetchWorkspacesThunk } from "@/components/workspace/workspaceThunks";
+import { fetchWorkspacesThunk, deleteWorkspaceThunk } from "@/components/workspace/workspaceThunks";
 import CreateWorkspaceModal from "@/components/workspace/modals/CreateWorkspaceModal";
+import ConfirmDeleteWorkspaceModal from "@/components/workspace/modals/ConfirmDeleteWorkspaceModal";
 import InlineWorkspaceRenameInput from "@/components/workspace/rename/InlineWorkspaceRenameInput";
+import type { IWorkspace } from "@/api/services/workspaceServices.type";
 
 interface DrawerProps {
     isOpen: boolean;
@@ -22,6 +24,7 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
 
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [editingWorkspaceId, setEditingWorkspaceId] = useState<string | null>(null);
+    const [deletingWorkspace, setDeletingWorkspace] = useState<IWorkspace | null>(null);
 
     // 1. Fetch workspaces when authenticated user mounts
     useEffect(() => {
@@ -33,12 +36,28 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
     // 2. Sync URL search param ?workspace=id with Redux activeWorkspaceId
     useEffect(() => {
         const urlWorkspaceId = searchParams.get("workspace");
-        if (urlWorkspaceId && urlWorkspaceId !== activeWorkspaceId) {
-            dispatch(setActiveWorkspaceId(urlWorkspaceId));
-        } else if (!urlWorkspaceId && activeWorkspaceId) {
-            setSearchParams({ workspace: activeWorkspaceId }, { replace: true });
+        if (urlWorkspaceId) {
+
+            if (urlWorkspaceId !== activeWorkspaceId) {
+                dispatch(setActiveWorkspaceId(urlWorkspaceId));
+            }
+        } else {
+            // Redux -> local storage -> first workspace
+            const savedId = localStorage.getItem("focusflow_active_workspace");
+            const fallbackId =
+                activeWorkspaceId ??
+                savedId ??
+                (workspaces.length > 0 ? workspaces[0].id : null);
+            if (fallbackId) {
+                // automatically fill URL param without extra history
+                setSearchParams({ workspace: fallbackId }, { replace: true });
+
+                if (activeWorkspaceId !== fallbackId) {
+                    dispatch(setActiveWorkspaceId(fallbackId));
+                }
+            }
         }
-    }, [searchParams, activeWorkspaceId, dispatch, setSearchParams]);
+    }, [searchParams, activeWorkspaceId, workspaces, dispatch, setSearchParams]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -59,8 +78,19 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
     }, [isOpen, onClose]);
 
     const handleSelectWorkspace = (id: string) => {
-        dispatch(setActiveWorkspaceId(id));
         setSearchParams({ workspace: id });
+    };
+
+    const handleConfirmDeleteWorkspace = async () => {
+        if (!deletingWorkspace) return;
+        try {
+            const actionResult = await dispatch(deleteWorkspaceThunk(deletingWorkspace.id));
+            if (deleteWorkspaceThunk.fulfilled.match(actionResult)) {
+                setDeletingWorkspace(null);
+            }
+        } catch {
+            // Handled in thunk / toast
+        }
     };
 
     return createPortal(
@@ -129,20 +159,33 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
                                                 ) : (
                                                     <span className="truncate flex-1 text-left">{ws.name}</span>
                                                 )}
+                                                {!isEditing && (
+                                                    <div className={`flex items-center gap-1 opacity-0 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity ${isActive ? "opacity-100" : ""}`}>
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setEditingWorkspaceId(ws.id);
+                                                            }}
+                                                            className="p-1 text-text-secondary hover:text-primary-600 border-none bg-transparent cursor-pointer shrink-0 rounded hover:bg-black/5"
+                                                            title="Rename workspace"
+                                                        >
+                                                            <PencilIcon className="w-3.5 h-3.5" />
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setDeletingWorkspace(ws);
+                                                            }}
+                                                            className="p-1 text-text-secondary hover:text-red-600 border-none bg-transparent cursor-pointer shrink-0 rounded hover:bg-black/5"
+                                                            title="Delete workspace"
+                                                        >
+                                                            <TrashIcon className="w-3.5 h-3.5" />
+                                                        </button>
+                                                    </div>
+                                                )}
                                             </Button>
-                                            {!isEditing && (
-                                                <button
-                                                    type="button"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setEditingWorkspaceId(ws.id);
-                                                    }}
-                                                    className="lg:hidden p-1 text-xs text-text-secondary hover:text-primary-600 border-none bg-transparent cursor-pointer shrink-0"
-                                                    title="Rename workspace"
-                                                >
-                                                    ✎
-                                                </button>
-                                            )}
                                         </li>
                                     );
                                 })}
@@ -163,10 +206,18 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
                 </aside>
             </div>
 
-            {/* Modal rendered via React createPortal */}
+            {/* Modals rendered via React createPortal */}
             <CreateWorkspaceModal
                 isOpen={isCreateModalOpen}
                 onClose={() => { setIsCreateModalOpen(false); }}
+            />
+
+            <ConfirmDeleteWorkspaceModal
+                isLoading={isLoading}
+                isOpen={Boolean(deletingWorkspace)}
+                onClose={() => { setDeletingWorkspace(null); }}
+                onConfirm={() => { void handleConfirmDeleteWorkspace(); }}
+                workspaceName={deletingWorkspace?.name ?? ""}
             />
         </>,
         document.body

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { deleteTask, setActiveTask } from "../kanbanSlice";
+import { setActiveTask } from "../kanbanSlice";
 import TaskDetailHeader from "./components/TaskDetailHeader";
 import TaskDetailForm from "./components/TaskDetailForm";
 
@@ -37,11 +37,6 @@ function TaskDetailModalContent({ taskId }: { taskId: string }) {
         dispatch(setActiveTask(null));
     };
 
-    const handleDelete = () => {
-        dispatch(deleteTask(task.id));
-        handleClose();
-    };
-
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn">
             <div
@@ -52,8 +47,7 @@ function TaskDetailModalContent({ taskId }: { taskId: string }) {
             <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto custom-scrollbar bg-background-secondary-0 border border-border rounded-2xl shadow-2xl p-6 flex flex-col gap-6 z-10">
                 <TaskDetailHeader
                     onClose={handleClose}
-                    onDelete={handleDelete}
-                    taskId={task.id}
+                    task={task}
                 />
 
                 <TaskDetailForm onClose={handleClose} task={task} />

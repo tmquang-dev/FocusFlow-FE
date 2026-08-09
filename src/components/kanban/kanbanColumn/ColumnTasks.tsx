@@ -35,6 +35,7 @@ function ColumnTasks({ status }: ColumnTasksProps) {
                     id={task.id}
                     index={idx}
                     status={task.columnId}
+                    task_num={task.task_num}
                     title={task.title}
                 />
             ))}

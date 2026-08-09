@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useAppDispatch } from "@/app/hooks";
-import { updateTask } from "../../kanbanSlice";
+import { updateTaskDetailThunk } from "../../kanbanThunks";
 import type { ColumnId, Task } from "../../kanban.types";
 import TaskStatusSelect from "./TaskStatusSelect";
 import TaskDetailFooter from "./TaskDetailFooter";
@@ -43,16 +43,22 @@ function TaskDetailForm({ task, onClose }: TaskDetailFormProps) {
     // eslint-disable-next-line react-hooks/incompatible-library
     const currentStatus = watch("status");
 
-    const onSubmit = (data: TaskDetailSchema) => {
-        dispatch(
-            updateTask({
-                id: task.id,
-                title: data.title.trim(),
-                desc: data.desc?.trim() ?? "",
-                columnId: data.status,
-            })
-        );
-        onClose();
+    const onSubmit = async (data: TaskDetailSchema) => {
+        try {
+            const actionResult = await dispatch(
+                updateTaskDetailThunk({
+                    taskId: task.id,
+                    title: data.title.trim(),
+                    description: data.desc?.trim() ?? "",
+                    status: data.status,
+                })
+            );
+            if (updateTaskDetailThunk.fulfilled.match(actionResult)) {
+                onClose();
+            }
+        } catch {
+            // Handled in thunk / toast
+        }
     };
 
     return (
