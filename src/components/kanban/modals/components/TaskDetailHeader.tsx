@@ -2,17 +2,17 @@ import Button from "@/components/common/Button";
 import { CrossIcon } from "@/components/common/Icons";
 
 interface TaskDetailHeaderProps {
-    taskId: string;
+    taskNum: number;
     onClose: () => void;
     onDelete: () => void;
 }
 
-function TaskDetailHeader({ taskId, onClose, onDelete }: TaskDetailHeaderProps) {
+function TaskDetailHeader({ taskNum, onClose, onDelete }: TaskDetailHeaderProps) {
     return (
         <div className="flex items-center justify-between border-b border-border pb-4">
             <div className="flex items-center gap-3">
                 <span className="px-2.5 py-1 text-xs font-semibold rounded-md bg-gray-900 text-white">
-                    {taskId}
+                    {`#${taskNum}`}
                 </span>
                 <h2 className="text-xl font-bold text-text-main">Task Details</h2>
             </div>

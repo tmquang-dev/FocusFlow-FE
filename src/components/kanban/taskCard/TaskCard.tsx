@@ -9,6 +9,7 @@ import { STATUS_THEMES } from "../kanbanConstants/kanban.constants";
 
 interface TaskCardProps {
     status: ColumnId;
+    task_num: number;
     id: string;
     index?: number;
     title: string;
@@ -16,7 +17,7 @@ interface TaskCardProps {
     isOverlay?: boolean;
 }
 
-function TaskCard({ status, id, index = 0, title, desc, isOverlay }: TaskCardProps) {
+function TaskCard({ status, id, index = 0, title, desc, isOverlay, task_num }: TaskCardProps) {
     const dispatch = useAppDispatch();
     const { ref, isDragging } = useSortable({
         id,
@@ -59,9 +60,9 @@ function TaskCard({ status, id, index = 0, title, desc, isOverlay }: TaskCardPro
                     )}
                 >
                     <span className={cn("-mt-px font-text-id text-text-on-branch", theme.badgeClass)}>
-                        {id}
+                        {`#${task_num}`}
                     </span>
-                </span>
+                </span> 
                 <Button
                     aria-label="Remove task"
                     className="p-2 text-text-on-yellow hover:bg-black/10 rounded"

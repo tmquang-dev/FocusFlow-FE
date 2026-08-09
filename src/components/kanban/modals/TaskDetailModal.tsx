@@ -91,7 +91,7 @@ function TaskDetailModalContent({ taskId }: { taskId: string }) {
                     <TaskDetailHeader
                         onClose={handleClose}
                         onDelete={handleDeleteClick}
-                        taskId={task.id}
+                        taskNum={task.task_num}
                     />
 
                     <TaskDetailForm onClose={handleClose} task={task} />
