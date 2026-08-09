@@ -5,6 +5,7 @@ import type {
     IApiGetWorkspacesSuccess,
     IApiCreateWorkspaceSuccess,
     IApiRenameWorkspaceSuccess,
+    IApiDeleteWorkspaceSuccess,
 } from "./workspaceServices.type";
 
 export const workspaceServices = {
@@ -16,4 +17,7 @@ export const workspaceServices = {
 
     renameWorkspace: (workspaceId: string, payload: IRenameWorkspacePayload): Promise<IApiRenameWorkspaceSuccess> =>
         axiosClient.patch(`/v1/workspaces/${workspaceId}`, payload),
+
+    deleteWorkspace: (workspaceId: string): Promise<IApiDeleteWorkspaceSuccess> =>
+        axiosClient.delete(`/v1/workspaces/${workspaceId}`),
 };

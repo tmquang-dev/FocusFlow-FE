@@ -41,3 +41,15 @@ export const renameWorkspaceThunk = createAsyncThunk(
         }
     }
 );
+
+export const deleteWorkspaceThunk = createAsyncThunk(
+    "workspace/deleteWorkspace",
+    async (workspaceId: string, { rejectWithValue }) => {
+        try {
+            await workspaceServices.deleteWorkspace(workspaceId);
+            return workspaceId;
+        } catch (error) {
+            return rejectWithValue(getErrorMessage(error, "Failed to delete workspace"));
+        }
+    }
+);

@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { toast } from "sonner";
 import type { IWorkspace } from "@/api/services/workspaceServices.type";
 import { getInitialActiveWorkspaceId } from "@/utils/getInitialActiveWorkspaceId";
 import type { WorkspaceState } from "./workspace.type";
@@ -6,6 +7,7 @@ import {
     fetchWorkspacesThunk,
     createWorkspaceThunk,
     renameWorkspaceThunk,
+    deleteWorkspaceThunk,
 } from "./workspaceThunks";
 
 const ACTIVE_WORKSPACE_STORAGE_KEY = "focusflow_active_workspace";
@@ -112,6 +114,26 @@ const workspaceSlice = createSlice({
             .addCase(renameWorkspaceThunk.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = (action.payload as string | undefined) ?? "Failed to rename workspace";
+            })
+            // Delete Workspace
+            .addCase(deleteWorkspaceThunk.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(deleteWorkspaceThunk.fulfilled, (state, action: PayloadAction<string>) => {
+                state.isLoading = false;
+                const deletedId = action.payload;
+                state.workspaces = state.workspaces.filter((w) => w.id !== deletedId);
+                if (state.activeWorkspaceId === deletedId) {
+                    state.activeWorkspaceId = null;
+                }
+                toast.success("Workspace deleted successfully.");
+            })
+            .addCase(deleteWorkspaceThunk.rejected, (state, action) => {
+                state.isLoading = false;
+                const errorMsg = (action.payload as string | undefined) ?? "Failed to delete workspace";
+                state.error = errorMsg;
+                toast.error(errorMsg);
             });
     },
 });

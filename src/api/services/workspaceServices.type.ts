@@ -33,3 +33,8 @@ export interface IApiRenameWorkspaceSuccess {
         workspace: IWorkspace;
     };
 }
+
+export interface IApiDeleteWorkspaceSuccess {
+    status: "success";
+    message: string;
+}
