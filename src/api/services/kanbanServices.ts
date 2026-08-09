@@ -5,6 +5,7 @@ import type {
     IUpdateTaskDetailPayload,
     IApiGetTasksSuccess,
     IApiTaskSuccess,
+    IApiDeleteTaskSuccess,
 } from "./kanbanServices.type";
 
 export const kanbanServices = {
@@ -19,4 +20,7 @@ export const kanbanServices = {
 
     updateTaskDetail: (taskId: string, payload: IUpdateTaskDetailPayload): Promise<IApiTaskSuccess> =>
         axiosClient.patch(`/v1/tasks/${taskId}`, payload),
+
+    deleteTask: (taskId: string): Promise<IApiDeleteTaskSuccess> =>
+        axiosClient.delete(`/v1/tasks/${taskId}`),
 };

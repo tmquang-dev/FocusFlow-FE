@@ -33,12 +33,28 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
     // 2. Sync URL search param ?workspace=id with Redux activeWorkspaceId
     useEffect(() => {
         const urlWorkspaceId = searchParams.get("workspace");
-        if (urlWorkspaceId && urlWorkspaceId !== activeWorkspaceId) {
-            dispatch(setActiveWorkspaceId(urlWorkspaceId));
-        } else if (!urlWorkspaceId && activeWorkspaceId) {
-            setSearchParams({ workspace: activeWorkspaceId }, { replace: true });
+        if (urlWorkspaceId) {
+
+            if (urlWorkspaceId !== activeWorkspaceId) {
+                dispatch(setActiveWorkspaceId(urlWorkspaceId));
+            }
+        } else {
+            // Redux -> local storage -> first workspace
+            const savedId = localStorage.getItem("focusflow_active_workspace");
+            const fallbackId =
+                activeWorkspaceId ??
+                savedId ??
+                (workspaces.length > 0 ? workspaces[0].id : null);
+            if (fallbackId) {
+                // automatically fill URL param without extra history
+                setSearchParams({ workspace: fallbackId }, { replace: true });
+
+                if (activeWorkspaceId !== fallbackId) {
+                    dispatch(setActiveWorkspaceId(fallbackId));
+                }
+            }
         }
-    }, [searchParams, activeWorkspaceId, dispatch, setSearchParams]);
+    }, [searchParams, activeWorkspaceId, workspaces, dispatch, setSearchParams]);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -59,7 +75,6 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
     }, [isOpen, onClose]);
 
     const handleSelectWorkspace = (id: string) => {
-        dispatch(setActiveWorkspaceId(id));
         setSearchParams({ workspace: id });
     };
 
