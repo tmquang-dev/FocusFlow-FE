@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { toast } from "sonner";
-import type { ColumnId, Task } from "./kanban.types";
+import type { ColumnId, KanbanState, Task } from "./kanban.types";
 import type { IBackendTask } from "@/api/services/kanbanServices.type";
 import {
     fetchTasksThunk,
@@ -10,12 +10,7 @@ import {
     deleteTaskThunk,
 } from "./kanbanThunks";
 
-export interface KanbanState {
-    tasks: Task[];
-    activeTaskId: string | null;
-    isLoading: boolean;
-    error: string | null;
-}
+
 
 const mapBackendTaskToTask = (bt: IBackendTask): Task => ({
     id: bt.id,
@@ -29,6 +24,7 @@ const mapBackendTaskToTask = (bt: IBackendTask): Task => ({
 const initialState: KanbanState = {
     tasks: [],
     activeTaskId: null,
+    deletingTask: null,
     isLoading: false,
     error: null,
 };
@@ -39,6 +35,12 @@ export const kanbanSlice = createSlice({
     reducers: {
         setActiveTask: (state, action: PayloadAction<string | null>) => {
             state.activeTaskId = action.payload;
+        },
+        setDeletingTask: (
+            state,
+            action: PayloadAction<{ id: string; title: string } | null>
+        ) => {
+            state.deletingTask = action.payload;
         },
         moveTaskOptimistic: (
             state,
@@ -176,6 +178,7 @@ export const kanbanSlice = createSlice({
             })
             .addCase(deleteTaskThunk.fulfilled, (state, action: PayloadAction<string>) => {
                 state.isLoading = false;
+                state.deletingTask = null;
                 state.tasks = state.tasks.filter((t) => t.id !== action.payload);
                 if (state.activeTaskId === action.payload) {
                     state.activeTaskId = null;
@@ -184,6 +187,7 @@ export const kanbanSlice = createSlice({
             })
             .addCase(deleteTaskThunk.rejected, (state, action) => {
                 state.isLoading = false;
+                state.deletingTask = null;
                 const errorMsg = (action.payload as string | undefined) ?? "Failed to delete task";
                 state.error = errorMsg;
                 toast.error(errorMsg);
@@ -191,6 +195,6 @@ export const kanbanSlice = createSlice({
     },
 });
 
-export const { setActiveTask, moveTaskOptimistic, deleteTask, clearKanbanState } = kanbanSlice.actions;
+export const { setActiveTask, setDeletingTask, moveTaskOptimistic, deleteTask, clearKanbanState } = kanbanSlice.actions;
 
 export default kanbanSlice.reducer;

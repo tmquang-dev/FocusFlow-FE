@@ -1,5 +1,13 @@
 export type ColumnId = "BACKLOG" | "TO_DO" | "IN_PROGRESS" | "DONE";
 
+export interface KanbanState {
+    tasks: Task[];
+    activeTaskId: string | null;
+    deletingTask: { id: string; title: string } | null;
+    isLoading: boolean;
+    error: string | null;
+}
+
 export interface Task {
     id: string;
     task_num: string;
