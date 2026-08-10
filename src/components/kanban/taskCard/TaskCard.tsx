@@ -16,9 +16,11 @@ interface TaskCardProps {
     title: string;
     desc?: string;
     isOverlay?: boolean;
+    isFocus?: boolean;
+    className?: string;
 }
 
-function TaskCard({ status, id, index = 0, title, desc, isOverlay, task_num }: TaskCardProps) {
+function TaskCard({ status, id, index = 0, title, desc, isOverlay, task_num, isFocus, className }: TaskCardProps) {
     const dispatch = useAppDispatch();
     const { ref, isDragging } = useSortable({
         id,
@@ -43,8 +45,9 @@ function TaskCard({ status, id, index = 0, title, desc, isOverlay, task_num }: T
                 "flex flex-col items-start gap-2.5 p-3 relative self-stretch w-full flex-[0_0_auto] rounded-lg overflow-hidden border-solid border-t border-r border-b-2 border-l-4 transition-all cursor-pointer select-none",
                 theme.cardClass,
                 theme.shadowClass,
-                isDragging && "opacity-40 scale-[0.98]",
-                isOverlay && "rotate-2 shadow-2xl scale-105"
+                !isFocus && isDragging && "opacity-40 scale-[0.98]",
+                !isFocus && isOverlay && "rotate-2 shadow-2xl scale-105",
+                className
             )}
             onClick={handleCardClick}
         >
@@ -59,14 +62,16 @@ function TaskCard({ status, id, index = 0, title, desc, isOverlay, task_num }: T
                         {`#${task_num}`}
                     </span>
                 </span>
-                <DeleteTaskTrigger task={{ id, title }}>
-                    <Button
-                        aria-label="Remove task"
-                        className="p-2 text-text-on-yellow hover:bg-black/10 rounded"
-                        leftIcon={<CrossIcon className="relative w-2 h-2" />}
-                        variant="text"
-                    />
-                </DeleteTaskTrigger>
+                {!isFocus &&
+                    <DeleteTaskTrigger task={{ id, title }}>
+                        <Button
+                            aria-label="Remove task"
+                            className="p-2 text-text-on-yellow hover:bg-black/10 rounded"
+                            leftIcon={<CrossIcon className="relative w-2 h-2" />}
+                            variant="text"
+                        />
+                    </DeleteTaskTrigger>
+                }
             </div>
             <div className="flex flex-col items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
                 <div className="flex items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
@@ -82,7 +87,7 @@ function TaskCard({ status, id, index = 0, title, desc, isOverlay, task_num }: T
                     </div>
                 )}
             </div>
-            {status === "IN_PROGRESS" && (
+            {status === "IN_PROGRESS" && !isFocus && (
                 <>
                     <div className="relative self-stretch w-full h-px border border-solid border-border" />
                     <Button
