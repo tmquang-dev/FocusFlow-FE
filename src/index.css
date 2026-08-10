@@ -152,14 +152,6 @@
     @apply font-inter text-xs font-normal leading-4;
   }
 
-  .font-text-h3-strikethrough {
-    @apply font-inter text-base font-medium leading-5 line-through;
-  }
-
-  .font-text-small-strikethrough {
-    @apply font-inter text-xs font-normal leading-4 line-through;
-  }
-
   .font-text-default {
     @apply font-inter text-xs font-normal leading-4;
   }
