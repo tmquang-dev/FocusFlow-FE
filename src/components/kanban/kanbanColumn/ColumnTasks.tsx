@@ -1,3 +1,4 @@
+import { shallowEqual } from "react-redux";
 import TaskCard from "../taskCard/TaskCard";
 import type { ColumnId } from "../kanban.types";
 import { useAppSelector } from "@/app/hooks";
@@ -9,10 +10,12 @@ interface ColumnTasksProps {
 }
 
 function ColumnTasks({ status }: ColumnTasksProps) {
-    const tasks = useAppSelector((state) =>
-        state.kanban.tasks
-            .filter((task) => task.columnId === status)
-            .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    const tasks = useAppSelector(
+        (state) =>
+            state.kanban.tasks
+                .filter((task) => task.columnId === status)
+                .sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+        shallowEqual
     );
 
     const { ref, isDropTarget } = useDroppable({
