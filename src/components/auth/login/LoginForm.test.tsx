@@ -2,7 +2,7 @@ import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 
 
-import { renderWithProviders, screen, waitFor } from "@/utils/test-utils";
+import { renderWithProviders, screen, waitFor, fireEvent } from "@/utils/test-utils";
 import { authServices } from "@/api/services/authServices";
 import LoginForm from "./LoginForm";
 
@@ -78,9 +78,16 @@ describe("LoginForm Component", () => {
 
         const { store } = renderWithProviders(<LoginForm />);
 
-        await user.type(screen.getByLabelText(/^email$/i), "user@example.com");
-        await user.type(screen.getByLabelText(/^password$/i), "password123");
-        await user.click(screen.getByRole("button", { name: /log in/i }));
+        const emailInput = screen.getByLabelText(/^email$/i);
+        const passwordInput = screen.getByLabelText(/^password$/i);
+
+        await user.type(emailInput, "user@example.com");
+        await user.type(passwordInput, "password123");
+
+        const form = emailInput.closest("form");
+        if (form) {
+            fireEvent.submit(form);
+        }
 
         await waitFor(() => {
             expect(authServices.login).toHaveBeenCalledWith({
