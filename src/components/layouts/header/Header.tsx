@@ -1,17 +1,45 @@
-import { useState } from "react"
-import { Link } from "react-router"
-import Button from "@/components/common/Button"
-import { ArrowDownIcon, LogoIcon, MenuBurger } from "@/components/common/Icons"
-import UserAvatar from "@/components/common/UserAvatar"
-import Menu from "@/components/common/Menu"
-import Drawer from "@/components/layouts/drawer/Drawer"
+import { useState } from "react";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router";
+import Button from "@/components/common/Button";
+import { ArrowDownIcon, ChevronLeftIcon, LogoIcon, MenuBurger } from "@/components/common/Icons";
+import UserAvatar from "@/components/common/UserAvatar";
+import Menu from "@/components/common/Menu";
+import Drawer from "@/components/layouts/drawer/Drawer";
 
 function Header() {
-    const [isOpen, setIsOpen] = useState(false)
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const [isOpen, setIsOpen] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+    const isFocusMode = location.pathname === "/focus-mode";
 
     const toggleMenu = () => {
-        setIsOpen(!isOpen)
+        setIsOpen(!isOpen);
+    };
+
+    const handleBackToHome = () => {
+        const workspaceParam = searchParams.get("workspace");
+        const targetPath = workspaceParam ? `/?workspace=${workspaceParam}` : "/";
+        void navigate(targetPath);
+    };
+
+    if (isFocusMode) {
+        return (
+            <header className="flex justify-center items-center gap-2.5 h-15 px-2.5 bg-background-main border-b border-border">
+                <div className="flex max-w-page-content px-2.5 justify-start items-center w-full">
+                    <Button
+                        onClick={handleBackToHome}
+                        variant="outlined"
+                        leftIcon={<ChevronLeftIcon className="w-4 h-4 text-text-main shrink-0" />}
+                        className="font-text-medium text-text-main px-3 py-1.5"
+                    >
+                        Back
+                    </Button>
+                </div>
+            </header>
+        );
     }
 
     return (
@@ -39,7 +67,7 @@ function Header() {
 
             <Drawer isOpen={isDrawerOpen} onClose={() => { setIsDrawerOpen(false); }} />
         </header>
-    )
+    );
 }
 
-export default Header
+export default Header;

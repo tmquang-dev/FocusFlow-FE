@@ -210,4 +210,14 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: var(--color-kanban-thumb-hover, #6B7280);
   }
+
+  /* Hide number input spinner arrows */
+  .hide-spinner::-webkit-outer-spin-button,
+  .hide-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .hide-spinner[type="number"] {
+    -moz-appearance: textfield;
+  }
 }

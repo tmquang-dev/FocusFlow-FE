@@ -264,7 +264,7 @@ export const LoadingIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
 export const ChevronLeftIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
     return (
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-            <path d="M12.6668 8.00004H3.3335M8.00016 3.33337L3.3335 8.00004L8.00016 12.6667" stroke="#111827" strokeWidth="round" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M12.6668 8.00004H3.3335M8.00016 3.33337L3.3335 8.00004L8.00016 12.6667" stroke="currentColor" strokeWidth="round" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
 
     )
@@ -432,6 +432,19 @@ export const SettingIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
         </g>
         <defs>
             <clipPath id="clip0_289_422">
+                <rect width="16" height="16" fill="white" />
+            </clipPath>
+        </defs>
+    </svg>
+)
+export const PauseIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+        <g clip-path="url(#clip0_289_209)">
+            <path d="M4.33333 0C3.71449 0 3.121 0.245833 2.68342 0.683417C2.24583 1.121 2 1.71449 2 2.33333V13.6667C2 14.2855 2.24583 14.879 2.68342 15.3166C3.121 15.7542 3.71449 16 4.33333 16C4.95217 16 5.54566 15.7542 5.98325 15.3166C6.42083 14.879 6.66667 14.2855 6.66667 13.6667V2.33333C6.66667 1.71449 6.42083 1.121 5.98325 0.683417C5.54566 0.245833 4.95217 0 4.33333 0V0Z" fill="currentColor" />
+            <path d="M11.6668 0C11.048 0 10.4545 0.245833 10.0169 0.683417C9.57933 1.121 9.3335 1.71449 9.3335 2.33333V13.6667C9.3335 14.2855 9.57933 14.879 10.0169 15.3166C10.4545 15.7542 11.048 16 11.6668 16C12.2857 16 12.8792 15.7542 13.3167 15.3166C13.7543 14.879 14.0002 14.2855 14.0002 13.6667V2.33333C14.0002 1.71449 13.7543 1.121 13.3167 0.683417C12.8792 0.245833 12.2857 0 11.6668 0V0Z" fill="currentColor" />
+        </g>
+        <defs>
+            <clipPath id="clip0_289_209">
                 <rect width="16" height="16" fill="white" />
             </clipPath>
         </defs>

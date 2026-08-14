@@ -5,7 +5,7 @@ import Footer from "./footer/Footer";
 
 function MainLayout() {
     return (
-        <div>
+        <div className="bg-background-main">
             <Toaster position="bottom-right" richColors />
             <Header />
             <main className="flex mt-10">

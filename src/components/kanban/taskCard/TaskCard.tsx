@@ -1,9 +1,10 @@
+import { useNavigate } from "react-router";
 import { cn } from "@/utils/cn";
 import Button from "@/components/common/Button";
 import { ClockIcon, CrossIcon } from "@/components/common/Icons";
 import type { ColumnId } from "../kanban.types";
 import { useSortable } from "@dnd-kit/react/sortable";
-import { useAppDispatch } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { setActiveTask } from "../kanbanSlice";
 import { STATUS_THEMES } from "../kanbanConstants/kanban.constants";
 import DeleteTaskTrigger from "../modals/DeleteTaskTrigger";
@@ -22,6 +23,9 @@ interface TaskCardProps {
 
 function TaskCard({ status, id, index = 0, title, desc, isOverlay, task_num, isFocus, className }: TaskCardProps) {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const activeWorkspaceId = useAppSelector((state) => state.workspace.activeWorkspaceId);
+
     const { ref, isDragging } = useSortable({
         id,
         index,
@@ -75,7 +79,7 @@ function TaskCard({ status, id, index = 0, title, desc, isOverlay, task_num, isF
             </div>
             <div className="flex flex-col items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
                 <div className="flex items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
-                    <h3 className="relative w-fit font-text-h3medium line-clamp-2 overflow-hidden text-ellipsis">
+                    <h3 className="relative text-text-main w-fit font-text-h3medium line-clamp-2 overflow-hidden text-ellipsis">
                         {title}
                     </h3>
                 </div>
@@ -95,6 +99,10 @@ function TaskCard({ status, id, index = 0, title, desc, isOverlay, task_num, isF
                         leftIcon={<ClockIcon className="relative w-4 h-4 text-text-on-yellow" />}
                         onClick={(e) => {
                             e.stopPropagation();
+                            const params = new URLSearchParams();
+                            if (activeWorkspaceId) params.set("workspace", activeWorkspaceId);
+                            params.set("id", id);
+                            void navigate(`/focus-mode?${params.toString()}`);
                         }}
                     >
                         Start Focus
