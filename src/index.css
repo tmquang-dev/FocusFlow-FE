@@ -152,14 +152,6 @@
     @apply font-inter text-xs font-normal leading-4;
   }
 
-  .font-text-h3-strikethrough {
-    @apply font-inter text-base font-medium leading-5 line-through;
-  }
-
-  .font-text-small-strikethrough {
-    @apply font-inter text-xs font-normal leading-4 line-through;
-  }
-
   .font-text-default {
     @apply font-inter text-xs font-normal leading-4;
   }
@@ -217,5 +209,15 @@
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: var(--color-kanban-thumb-hover, #6B7280);
+  }
+
+  /* Hide number input spinner arrows */
+  .hide-spinner::-webkit-outer-spin-button,
+  .hide-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .hide-spinner[type="number"] {
+    -moz-appearance: textfield;
   }
 }
