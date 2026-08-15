@@ -79,8 +79,8 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
                 ref={ref as React.Ref<HTMLButtonElement>}
                 type={type}
                 className={combinedClassName}
-                disabled={isloading}
-                {...(props)}
+                disabled={isloading ?? props.disabled}
+                {...props}
             >
                 {content}
             </button>

@@ -11,11 +11,13 @@ function UserAvatar({ className }: UserAvatarProps) {
     const user = useAppSelector((state) => state.profile.user);
     const [imageError, setImageError] = useState(false);
 
-    if (user?.avatar && !imageError) {
+    const avatarUrl = user?.avatar_url ?? user?.avatar;
+
+    if (avatarUrl && !imageError) {
         return (
             <img
-                src={user.avatar}
-                alt={user.full_name || "User avatar"}
+                src={avatarUrl}
+                alt={user?.full_name ?? "User avatar"}
                 onError={() => {
                     setImageError(true);
                 }}
