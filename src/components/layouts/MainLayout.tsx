@@ -8,7 +8,7 @@ function MainLayout() {
         <div className="bg-background-main">
             <Toaster position="bottom-right" richColors />
             <Header />
-            <main className="flex mt-10">
+            <main className="flex mt-4 sm:mt-10">
                 <Outlet />
             </main>
             <Footer />

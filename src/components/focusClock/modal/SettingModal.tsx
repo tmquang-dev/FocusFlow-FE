@@ -38,7 +38,7 @@ function SettingModal({ isOpen = true, onClose, onSave }: SettingModalProps) {
             />
 
             {/* Modal Container */}
-            <div className="relative z-10 w-full max-w-85 bg-background-secondary-0 border border-border rounded-xl shadow-2xl overflow-hidden flex flex-col">
+            <div className="relative z-10 w-[calc(100vw-32px)] sm:w-full max-w-85 bg-background-secondary-0 border border-border rounded-xl shadow-2xl overflow-hidden flex flex-col">
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-border">
                     <h2 className="font-text-h2 text-text-main">Cài đặt</h2>
