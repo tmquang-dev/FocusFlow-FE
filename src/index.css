@@ -218,6 +218,6 @@
     margin: 0;
   }
   .hide-spinner[type="number"] {
-    -moz-appearance: textfield;
+    appearance: textfield;
   }
 }

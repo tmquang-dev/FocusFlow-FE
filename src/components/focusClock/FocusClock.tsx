@@ -80,7 +80,7 @@ function FocusClock() {
     const seconds = String(timeLeft % 60).padStart(2, "0");
 
     return (
-        <div className="relative max-w-page-content w-full flex items-center justify-center min-h-170 mx-auto px-2.5">
+        <div className="relative max-w-page-content w-full flex flex-col items-center lg:flex-row lg:items-center lg:justify-start min-h-screen  lg:min-h-[calc(100vh-140px)] mx-auto px-4 sm:px-6 lg:px-2.5 py-2 sm:py-6 lg:py-0 gap-4 sm:gap-6 lg:gap-0">
             <SettingModal
                 isOpen={isSettingOpen}
                 onClose={() => {
@@ -89,28 +89,46 @@ function FocusClock() {
                 onSave={handleSaveSettings}
             />
 
-            <div className="w-fit px-40 py-28 mx-auto rounded-[50px] border border-primary-200 flex items-center justify-center">
-                <div className="p-6 flex flex-col gap-2.5 mx-auto rounded-[50px] border-2 border-primary-300">
+            {/* Task Card (stacked on mobile/tablet, absolute on desktop) */}
+            {focusedTask && (
+                <TaskCard
+                    id={focusedTask.id}
+                    index={0}
+                    task_num={focusedTask.task_num}
+                    status={focusedTask.columnId}
+                    title={focusedTask.title}
+                    desc={focusedTask.desc}
+                    isFocus
+                    className="w-full max-w-sm lg:max-w-none lg:w-71.25 lg:absolute lg:top-0 lg:left-2.5 opacity-80 lg:opacity-50 shadow-md"
+                />
+            )}
+
+            {/* Main Clock Outer Ring */}
+            <div className="w-fullmax-w-sm sm:max-w-md lg:max-w-none lg:w-fit px-4 sm:px-12 lg:px-40 py-8 sm:py-14 lg:py-28 mx-auto rounded-4xl sm:rounded-[40px] lg:rounded-[50px] border border-primary-200 flex items-center justify-center">
+                {/* Main Clock Inner Ring */}
+                <div className="w-full p-4 sm:p-5 lg:p-6 flex flex-col gap-2.5 mx-auto rounded- sm:rounded-[36px] lg:rounded-[50px] border-2 border-primary-300">
                     {/* Mode Tag */}
                     <div className="text-center text-xs font-semibold uppercase tracking-widest text-primary-600">
                         {mode === "focus" ? "Focus Session" : "Break Session"}
                     </div>
 
-                    <div className="flex h-26.5 justify-center items-center gap-2.5 rounded-[42px] border border-primary-600 p-2.5">
+                    {/* Time Digits Box */}
+                    <div className="flex h-20 sm:h-26.5 justify-center items-center gap-1.5 sm:gap-2.5 rounded-3xl sm:rounded-[42px] border border-primary-600 p-2 sm:p-2.5">
                         {/* Minute */}
-                        <div className="font-text-time text-text-main">{minutes}</div>
+                        <div className="font-text-time text-3xl sm:text-5xl text-text-main">{minutes}</div>
                         {/* Colon */}
-                        <div className="font-text-time text-text-main">:</div>
+                        <div className="font-text-time text-3xl sm:text-5xl text-text-main">:</div>
                         {/* Second */}
-                        <div className="font-text-time text-text-main">{seconds}</div>
+                        <div className="font-text-time text-3xl sm:text-5xl text-text-main">{seconds}</div>
                     </div>
 
-                    <div className="flex w-96.5 h-25 p-2.5 items-center gap-5">
+                    {/* Action Buttons Row */}
+                    <div className="flex w-full lg:w-96.5 h-auto sm:h-25 p-1 sm:p-2.5 items-center gap-3 sm:gap-5">
                         {isStarting ? (
                             <>
                                 <Button
                                     variant="outlined"
-                                    className="flex-[1_0_0] text-text-main"
+                                    className="flex-[1_0_0] text-text-main py-2.5 sm:py-3"
                                     onClick={handleStop}
                                 >
                                     Stop
@@ -118,7 +136,7 @@ function FocusClock() {
                                 <Button
                                     leftIcon={<PauseIcon />}
                                     variant="primary"
-                                    className="flex-[1_0_0] bg-amber-600 hover:bg-amber-700 active:bg-amber-800"
+                                    className="flex-[1_0_0] bg-amber-600 hover:bg-amber-700 active:bg-amber-800 py-2.5 sm:py-3"
                                     onClick={handlePause}
                                 >
                                     Pause
@@ -129,7 +147,7 @@ function FocusClock() {
                                 <Button
                                     leftIcon={<SettingIcon className="text-text-main" />}
                                     variant="outlined"
-                                    className="flex-[1_0_0] text-text-main"
+                                    className="flex-[1_0_0] text-text-main py-2.5 sm:py-3"
                                     onClick={() => {
                                         setIsSettingOpen(true);
                                     }}
@@ -139,7 +157,7 @@ function FocusClock() {
                                 <Button
                                     leftIcon={<PlayIcon />}
                                     variant="primary"
-                                    className="flex-[1_0_0]"
+                                    className="flex-[1_0_0] py-2.5 sm:py-3"
                                     onClick={handleStarting}
                                 >
                                     Start
@@ -149,19 +167,6 @@ function FocusClock() {
                     </div>
                 </div>
             </div>
-
-            {focusedTask && (
-                <TaskCard
-                    id={focusedTask.id}
-                    index={0}
-                    task_num={focusedTask.task_num}
-                    status={focusedTask.columnId}
-                    title={focusedTask.title}
-                    desc={focusedTask.desc}
-                    isFocus
-                    className="absolute top-0 left-2.5 w-71.25 opacity-50 shadow-md"
-                />
-            )}
         </div>
     );
 }
