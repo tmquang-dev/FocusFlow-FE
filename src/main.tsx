@@ -1,13 +1,13 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { RouterProvider } from 'react-router'
-import { Provider } from 'react-redux'
-import { route } from './router'
-import { store } from './app/store'
-import AuthInitializer from './components/AuthInitializer'
-import './index.css'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { RouterProvider } from "react-router";
+import { Provider } from "react-redux";
+import { route } from "./router";
+import { store } from "./app/store";
+import AuthInitializer from "./components/AuthInitializer";
+import "./index.css";
 
-const rootElement = document.getElementById('root')
+const rootElement = document.getElementById("root");
 
 if (rootElement) {
   createRoot(rootElement).render(
@@ -17,8 +17,8 @@ if (rootElement) {
           <RouterProvider router={route} />
         </AuthInitializer>
       </Provider>
-    </StrictMode>
-  )
+    </StrictMode>,
+  );
 } else {
-  console.error("Root element not found in DOM.")
+  console.error("Root element not found in DOM.");
 }

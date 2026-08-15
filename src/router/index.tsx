@@ -4,10 +4,10 @@ import { protectedRoutes } from "./protectedRoutes";
 import NotFound from "../pages/NotFound";
 
 export const route = createBrowserRouter([
-    publicRoutes,
-    protectedRoutes,
-    {
-        path: "*",
-        element: <NotFound />
-    }
-])  
+  publicRoutes,
+  protectedRoutes,
+  {
+    path: "*",
+    element: <NotFound />,
+  },
+]);

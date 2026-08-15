@@ -6,42 +6,44 @@ import { fetchTasksThunk } from "@/components/kanban/kanbanThunks";
 import FocusClock from "@/components/focusClock/FocusClock";
 
 function FocusMode() {
-    const [searchParams] = useSearchParams();
-    const dispatch = useAppDispatch();
-    const activeWorkspaceId = useAppSelector((state) => state.workspace.activeWorkspaceId);
+  const [searchParams] = useSearchParams();
+  const dispatch = useAppDispatch();
+  const activeWorkspaceId = useAppSelector(
+    (state) => state.workspace.activeWorkspaceId,
+  );
 
-    const workspaceParam = searchParams.get("workspace");
+  const workspaceParam = searchParams.get("workspace");
 
-    // Auto-enable Dark Mode when entering Focus Mode & restore theme on exit
-    useEffect(() => {
-        const root = document.documentElement;
-        const previousWasDark = root.classList.contains("dark");
+  // Auto-enable Dark Mode when entering Focus Mode & restore theme on exit
+  useEffect(() => {
+    const root = document.documentElement;
+    const previousWasDark = root.classList.contains("dark");
 
-        root.classList.add("dark");
-        root.setAttribute("data-theme", "dark");
+    root.classList.add("dark");
+    root.setAttribute("data-theme", "dark");
 
-        return () => {
-            if (!previousWasDark) {
-                root.classList.remove("dark");
-                root.removeAttribute("data-theme");
-            }
-        };
-    }, []);
+    return () => {
+      if (!previousWasDark) {
+        root.classList.remove("dark");
+        root.removeAttribute("data-theme");
+      }
+    };
+  }, []);
 
-    useEffect(() => {
-        if (workspaceParam && workspaceParam !== activeWorkspaceId) {
-            dispatch(setActiveWorkspaceId(workspaceParam));
-        }
-    }, [workspaceParam, activeWorkspaceId, dispatch]);
+  useEffect(() => {
+    if (workspaceParam && workspaceParam !== activeWorkspaceId) {
+      dispatch(setActiveWorkspaceId(workspaceParam));
+    }
+  }, [workspaceParam, activeWorkspaceId, dispatch]);
 
-    useEffect(() => {
-        const currentWsId = workspaceParam ?? activeWorkspaceId;
-        if (currentWsId) {
-            void dispatch(fetchTasksThunk(currentWsId));
-        }
-    }, [workspaceParam, activeWorkspaceId, dispatch]);
+  useEffect(() => {
+    const currentWsId = workspaceParam ?? activeWorkspaceId;
+    if (currentWsId) {
+      void dispatch(fetchTasksThunk(currentWsId));
+    }
+  }, [workspaceParam, activeWorkspaceId, dispatch]);
 
-    return <FocusClock />;
+  return <FocusClock />;
 }
 
 export default FocusMode;
