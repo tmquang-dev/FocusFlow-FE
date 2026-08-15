@@ -1,8 +1,20 @@
+export interface ISocialLinkItem {
+    is_linked: boolean;
+    username: string | null;
+}
+
+export interface ISocialLinks {
+    github?: ISocialLinkItem;
+    google?: ISocialLinkItem;
+}
+
 export interface IUser {
     id: string;
     email: string;
     full_name: string;
     avatar?: string | null;
+    avatar_url?: string | null;
+    social_links?: ISocialLinks;
     is_verified?: boolean;
     auth_provider?: string;
     created_at?: string;
