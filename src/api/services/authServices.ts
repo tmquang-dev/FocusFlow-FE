@@ -1,6 +1,7 @@
 import axiosClient from "../axiosClient";
 import {
   type loginPayload,
+  type IGoogleLoginPayload,
   type IRegisterPayload,
   type IVerifyOtpPayload,
   type IResendOtpPayload,
@@ -24,6 +25,8 @@ import {
 export const authServices = {
   login: (payload: loginPayload): Promise<IApiLoginSuccess> =>
     axiosClient.post("/v1/auth/login", payload),
+  googleLogin: (payload: IGoogleLoginPayload): Promise<IApiLoginSuccess> =>
+    axiosClient.post("/v1/auth/google", payload),
   register: (payload: IRegisterPayload): Promise<IApiRegisterSuccess> =>
     axiosClient.post("/v1/auth/register/send-otp", payload),
   verifyOtp: (payload: IVerifyOtpPayload): Promise<IApiVerifyOtpSuccess> =>

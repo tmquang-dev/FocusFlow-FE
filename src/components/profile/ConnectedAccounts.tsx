@@ -1,5 +1,6 @@
+import { useGoogleLogin } from "@react-oauth/google";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { unlinkOAuthThunk } from "./profileThunks";
+import { linkOAuthThunk, unlinkOAuthThunk } from "./profileThunks";
 import Button from "@/components/common/Button";
 import { GithubIcon, GoogleIcon } from "@/components/common/Icons";
 import { toast } from "sonner";
@@ -16,6 +17,29 @@ export function ConnectedAccounts() {
   const googleLinked = socialLinks?.google?.is_linked ?? false;
   const googleUsername = socialLinks?.google?.username;
 
+  const handleLinkGoogle = useGoogleLogin({
+    onSuccess: (codeResponse) => {
+      void (async () => {
+        try {
+          await dispatch(
+            linkOAuthThunk({
+              provider: "google",
+              auth_code: codeResponse.code,
+            }),
+          ).unwrap();
+          toast.success("Đã liên kết tài khoản Google thành công!");
+        } catch (err: unknown) {
+          const errorObj = err as { message?: string };
+          toast.error(errorObj.message ?? "Liên kết tài khoản Google thất bại");
+        }
+      })();
+    },
+    onError: () => {
+      toast.error("Không thể kết nối với Google OAuth");
+    },
+    flow: "auth-code",
+  });
+
   const handleUnlink = async (provider: "github" | "google") => {
     try {
       await dispatch(unlinkOAuthThunk({ provider })).unwrap();
@@ -28,10 +52,8 @@ export function ConnectedAccounts() {
     }
   };
 
-  const handleLink = (provider: "github" | "google") => {
-    toast.info(
-      `Vui lòng đăng nhập qua ${provider === "github" ? "GitHub" : "Google"} để hoàn tất liên kết.`,
-    );
+  const handleLinkGithub = () => {
+    toast.info("Vui lòng đăng nhập qua GitHub để hoàn tất liên kết.");
   };
 
   return (
@@ -73,7 +95,7 @@ export function ConnectedAccounts() {
               type="button"
               variant="outlined"
               onClick={() => {
-                handleLink("github");
+                handleLinkGithub();
               }}
               className="text-xs font-medium text-text-main px-4 py-1.5 rounded-lg border-border"
             >
@@ -114,7 +136,7 @@ export function ConnectedAccounts() {
               type="button"
               variant="outlined"
               onClick={() => {
-                handleLink("google");
+                handleLinkGoogle();
               }}
               className="text-xs font-medium text-text-main px-4 py-1.5 rounded-lg border-border"
             >
