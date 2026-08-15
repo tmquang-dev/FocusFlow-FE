@@ -57,37 +57,52 @@ export const kanbanSlice = createSlice({
 
             const sourceColumnId = task.columnId;
 
-            // 1. Update task's columnId
-            task.columnId = targetColumnId;
+            // 1. Same-column reordering using arrayMove with guard
+            if (sourceColumnId === targetColumnId) {
+                const columnTasks = state.tasks
+                    .filter((t) => t.columnId === targetColumnId)
+                    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 
-            // 2. Get all tasks for targetColumnId excluding current task
-            const otherTargetTasks = state.tasks
-                .filter((t) => t.columnId === targetColumnId && t.id !== activeId)
-                .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+                const oldIndex = columnTasks.findIndex((t) => t.id === activeId);
+                let newIndex = typeof targetIndex === "number" ? targetIndex : columnTasks.length - 1;
+                newIndex = Math.max(0, Math.min(newIndex, columnTasks.length - 1));
 
-            // 3. Determine insert position
-            let insertIndex = otherTargetTasks.length;
-            if (
-                typeof targetIndex === "number" &&
-                targetIndex >= 0 &&
-                targetIndex <= otherTargetTasks.length
-            ) {
-                insertIndex = targetIndex;
-            }
+                // GUARD: If index hasn't changed, do not mutate state to prevent jittering!
+                if (oldIndex === -1 || oldIndex === newIndex) return;
 
-            // 4. Insert task into target column list at insertIndex
-            otherTargetTasks.splice(insertIndex, 0, task);
+                const [movedTask] = columnTasks.splice(oldIndex, 1);
+                columnTasks.splice(newIndex, 0, movedTask);
 
-            // 5. Reassign order (1, 2, 3...) for all tasks in target column
-            otherTargetTasks.forEach((t, idx) => {
-                t.order = idx + 1;
-            });
+                columnTasks.forEach((t, idx) => {
+                    t.order = idx + 1;
+                });
+            } else {
+                // 2. Cross-column movement
+                task.columnId = targetColumnId;
 
-            // 6. Reassign order (1, 2, 3...) for all tasks in source column if moved across columns
-            if (sourceColumnId !== targetColumnId) {
+                const targetTasks = state.tasks
+                    .filter((t) => t.columnId === targetColumnId && t.id !== activeId)
+                    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+                let insertIndex = targetTasks.length;
+                if (
+                    typeof targetIndex === "number" &&
+                    targetIndex >= 0 &&
+                    targetIndex <= targetTasks.length
+                ) {
+                    insertIndex = targetIndex;
+                }
+
+                targetTasks.splice(insertIndex, 0, task);
+
+                targetTasks.forEach((t, idx) => {
+                    t.order = idx + 1;
+                });
+
                 const sourceTasks = state.tasks
                     .filter((t) => t.columnId === sourceColumnId && t.id !== activeId)
                     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
                 sourceTasks.forEach((t, idx) => {
                     t.order = idx + 1;
                 });

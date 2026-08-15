@@ -26,7 +26,10 @@ export function useKanbanDnd() {
         const sourceId = operation.source?.id;
         const target = operation.target;
 
-        if (!sourceId || !target || sourceId === target.id) return;
+        if (!sourceId || !target || String(sourceId) === String(target.id)) return;
+
+        const sourceTask = tasks.find((t) => t.id === String(sourceId));
+        if (!sourceTask) return;
 
         const targetColumnId: ColumnId | undefined =
             target.data?.status ??
@@ -35,16 +38,20 @@ export function useKanbanDnd() {
 
         if (!targetColumnId) return;
 
-        const targetIndex: number | undefined =
-            typeof target.data?.index === "number" ? target.data.index : undefined;
+        // ONLY move task optimistically during dragOver if changing columns!
+        // Moving within the same column during dragOver causes infinite DOM reordering jitter.
+        if (sourceTask.columnId !== targetColumnId) {
+            const targetIndex: number | undefined =
+                typeof target.data?.index === "number" ? target.data.index : undefined;
 
-        dispatch(
-            moveTaskOptimistic({
-                activeId: String(sourceId),
-                targetColumnId,
-                targetIndex,
-            })
-        );
+            dispatch(
+                moveTaskOptimistic({
+                    activeId: String(sourceId),
+                    targetColumnId,
+                    targetIndex,
+                })
+            );
+        }
     };
 
     const handleDragEnd = (event: DndEvent) => {
