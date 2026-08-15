@@ -53,26 +53,26 @@ A complete, multi-step auth flow backed by a secure token strategy:
 
 A focused, 4-column task board built for clarity:
 
-| Column | Color | Purpose |
-|---|---|---|
-| **Backlog** | Gray | Idea pool — unscheduled work |
-| **To Do** | Blue | Committed, ready to start |
-| **In Progress** | Amber | Currently being worked on |
-| **Done** | Green | Completed tasks |
+| Column          | Color | Purpose                      |
+| --------------- | ----- | ---------------------------- |
+| **Backlog**     | Gray  | Idea pool — unscheduled work |
+| **To Do**       | Blue  | Committed, ready to start    |
+| **In Progress** | Amber | Currently being worked on    |
+| **Done**        | Green | Completed tasks              |
 
 Key interactions:
 
 - **Quick Add Bar** — A persistent input pinned to the top: `Add a new task to Backlog...` (submit with Enter)
 - **Task Cards** — Display a unique task ID badge (monospace font), title, and a short description
 - **Done Column** — Cards are rendered at 50% opacity with grayed text to reduce visual cognitive load, signalling closure without deletion
-- **Start Focus Button** — Available exclusively on cards in the *In Progress* column, acting as the direct bridge between task management and the Focus Mode
+- **Start Focus Button** — Available exclusively on cards in the _In Progress_ column, acting as the direct bridge between task management and the Focus Mode
 - **Drag & Drop** — Powered by `@dnd-kit` for smooth, accessible column-to-column reordering
 
 ### ⏱️ Zen Focus Mode
 
 A distraction-free Pomodoro experience:
 
-- Triggered from any *In Progress* task card via the **Start Focus** button
+- Triggered from any _In Progress_ task card via the **Start Focus** button
 - **Full UI collapse**: sidebar and Kanban columns are completely hidden
 - **Large countdown timer** (`25:00` default, rendered in JetBrains Mono at `72px`) with Start / Pause / Reset controls
 - **Quick Settings Bubble** — A floating popover above the settings button for selecting session duration:
@@ -93,27 +93,27 @@ A distraction-free Pomodoro experience:
 
 ### Frontend
 
-| Category | Technology | Rationale |
-|---|---|---|
-| **Framework** | React 19 + TypeScript | Concurrent features, full type safety |
-| **Build Tool** | Vite 8 | Sub-second HMR, optimized production builds |
-| **State Management** | Redux Toolkit (RTK) | Predictable global state, RTK's opinionated structure reduces boilerplate |
-| **Styling** | Tailwind CSS v4 | CSS Custom Properties-based design tokens with native dark mode support |
-| **Drag & Drop** | `@dnd-kit` | Accessible, framework-agnostic DnD with touch support |
-| **Animations** | Framer Motion | Declarative animations for Focus Mode transitions and micro-interactions |
-| **Forms** | React Hook Form + Zod | Performant uncontrolled forms with schema-driven runtime validation |
-| **HTTP Client** | Axios | Interceptor-based request/response pipeline for silent token refresh |
-| **Routing** | React Router v7 | File-based nested routing with guard components |
-| **Testing** | Jest + Testing Library | Unit and integration tests with a Redux-aware `renderWithProviders` utility |
+| Category             | Technology             | Rationale                                                                   |
+| -------------------- | ---------------------- | --------------------------------------------------------------------------- |
+| **Framework**        | React 19 + TypeScript  | Concurrent features, full type safety                                       |
+| **Build Tool**       | Vite 8                 | Sub-second HMR, optimized production builds                                 |
+| **State Management** | Redux Toolkit (RTK)    | Predictable global state, RTK's opinionated structure reduces boilerplate   |
+| **Styling**          | Tailwind CSS v4        | CSS Custom Properties-based design tokens with native dark mode support     |
+| **Drag & Drop**      | `@dnd-kit`             | Accessible, framework-agnostic DnD with touch support                       |
+| **Animations**       | Framer Motion          | Declarative animations for Focus Mode transitions and micro-interactions    |
+| **Forms**            | React Hook Form + Zod  | Performant uncontrolled forms with schema-driven runtime validation         |
+| **HTTP Client**      | Axios                  | Interceptor-based request/response pipeline for silent token refresh        |
+| **Routing**          | React Router v7        | File-based nested routing with guard components                             |
+| **Testing**          | Jest + Testing Library | Unit and integration tests with a Redux-aware `renderWithProviders` utility |
 
 ### Backend
 
-| Category | Technology |
-|---|---|
-| **Runtime** | Node.js + Express |
-| **Database** | MongoDB (via Mongoose ODM) |
-| **Validation** | Zod (schema-driven, shared-type approach) |
-| **Email / OTP** | Resend SDK |
+| Category        | Technology                                |
+| --------------- | ----------------------------------------- |
+| **Runtime**     | Node.js + Express                         |
+| **Database**    | MongoDB (via Mongoose ODM)                |
+| **Validation**  | Zod (schema-driven, shared-type approach) |
+| **Email / OTP** | Resend SDK                                |
 
 ---
 
@@ -196,7 +196,7 @@ Request A → 401
   │   └─ POST /refresh-token
 Request B → 401 (arrives while refreshing)
   └─ isRefreshing = true → pushed to failedQueue[]
-  
+
 refresh success:
   ├─ processQueue(null) → replay Request B
   └─ replay Request A
@@ -358,8 +358,6 @@ focusflow-fe/
 ```
 
 ---
-
-
 
 <div align="center">
 

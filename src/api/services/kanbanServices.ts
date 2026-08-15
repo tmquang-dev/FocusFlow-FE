@@ -1,26 +1,35 @@
 import axiosClient from "../axiosClient";
 import type {
-    IQuickAddTaskPayload,
-    IMoveTaskPayload,
-    IUpdateTaskDetailPayload,
-    IApiGetTasksSuccess,
-    IApiTaskSuccess,
-    IApiDeleteTaskSuccess,
+  IQuickAddTaskPayload,
+  IMoveTaskPayload,
+  IUpdateTaskDetailPayload,
+  IApiGetTasksSuccess,
+  IApiTaskSuccess,
+  IApiDeleteTaskSuccess,
 } from "./kanbanServices.type";
 
 export const kanbanServices = {
-    getTasksByWorkspace: (workspaceId: string): Promise<IApiGetTasksSuccess> =>
-        axiosClient.get(`/v1/workspaces/${workspaceId}/tasks`),
+  getTasksByWorkspace: (workspaceId: string): Promise<IApiGetTasksSuccess> =>
+    axiosClient.get(`/v1/workspaces/${workspaceId}/tasks`),
 
-    quickAddTask: (workspaceId: string, payload: IQuickAddTaskPayload): Promise<IApiTaskSuccess> =>
-        axiosClient.post(`/v1/workspaces/${workspaceId}/tasks`, payload),
+  quickAddTask: (
+    workspaceId: string,
+    payload: IQuickAddTaskPayload,
+  ): Promise<IApiTaskSuccess> =>
+    axiosClient.post(`/v1/workspaces/${workspaceId}/tasks`, payload),
 
-    moveTask: (taskId: string, payload: IMoveTaskPayload): Promise<IApiTaskSuccess> =>
-        axiosClient.patch(`/v1/tasks/${taskId}/move`, payload),
+  moveTask: (
+    taskId: string,
+    payload: IMoveTaskPayload,
+  ): Promise<IApiTaskSuccess> =>
+    axiosClient.patch(`/v1/tasks/${taskId}/move`, payload),
 
-    updateTaskDetail: (taskId: string, payload: IUpdateTaskDetailPayload): Promise<IApiTaskSuccess> =>
-        axiosClient.patch(`/v1/tasks/${taskId}`, payload),
+  updateTaskDetail: (
+    taskId: string,
+    payload: IUpdateTaskDetailPayload,
+  ): Promise<IApiTaskSuccess> =>
+    axiosClient.patch(`/v1/tasks/${taskId}`, payload),
 
-    deleteTask: (taskId: string): Promise<IApiDeleteTaskSuccess> =>
-        axiosClient.delete(`/v1/tasks/${taskId}`),
+  deleteTask: (taskId: string): Promise<IApiDeleteTaskSuccess> =>
+    axiosClient.delete(`/v1/tasks/${taskId}`),
 };

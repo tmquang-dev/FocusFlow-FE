@@ -1,4 +1,4 @@
 export interface CreateWorkspaceModalProps {
-    isOpen: boolean;
-    onClose: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }

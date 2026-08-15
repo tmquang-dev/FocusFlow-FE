@@ -1,40 +1,40 @@
 export interface IWorkspace {
-    id: string;
-    name: string;
-    created_at: string;
-    updated_at?: string;
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at?: string;
 }
 
 export interface ICreateWorkspacePayload {
-    name: string;
+  name: string;
 }
 
 export interface IRenameWorkspacePayload {
-    name: string;
+  name: string;
 }
 
 export interface IApiGetWorkspacesSuccess {
-    status: "success";
-    data: {
-        workspaces: IWorkspace[];
-    };
+  status: "success";
+  data: {
+    workspaces: IWorkspace[];
+  };
 }
 
 export interface IApiCreateWorkspaceSuccess {
-    status: "success";
-    data: {
-        workspace: IWorkspace;
-    };
+  status: "success";
+  data: {
+    workspace: IWorkspace;
+  };
 }
 
 export interface IApiRenameWorkspaceSuccess {
-    status: "success";
-    data: {
-        workspace: IWorkspace;
-    };
+  status: "success";
+  data: {
+    workspace: IWorkspace;
+  };
 }
 
 export interface IApiDeleteWorkspaceSuccess {
-    status: "success";
-    message: string;
+  status: "success";
+  message: string;
 }
