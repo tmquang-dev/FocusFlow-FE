@@ -7,7 +7,7 @@ import PageFallback from "@/components/common/PageFallback";
 
 const Home = lazy(() => import("../pages/home/Home"));
 const FocusMode = lazy(() => import("../pages/focusMode/FocusMode"));
-
+const ProfilePage = lazy(() => import("../pages/profile/ProfilePage"));
 
 export const protectedRoutes: RouteObject = {
     element: <ProtectedRoutes />,
@@ -29,6 +29,14 @@ export const protectedRoutes: RouteObject = {
                     element: (
                         <Suspense fallback={<PageFallback />}>
                             <FocusMode />
+                        </Suspense>
+                    ),
+                },
+                {
+                    path: "profile",
+                    element: (
+                        <Suspense fallback={<PageFallback />}>
+                            <ProfilePage />
                         </Suspense>
                     ),
                 },
