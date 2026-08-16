@@ -1,46 +1,46 @@
 import type { ColumnId } from "@/components/kanban/kanban.types";
 
 export interface IBackendTask {
-    id: string;
-    task_num: string;
-    title: string;
-    description?: string;
-    status: ColumnId;
-    order: number;
-    created_at: string;
-    updated_at?: string;
+  id: string;
+  task_num: string;
+  title: string;
+  description?: string;
+  status: ColumnId;
+  order: number;
+  created_at: string;
+  updated_at?: string;
 }
 
 export interface IQuickAddTaskPayload {
-    title: string;
+  title: string;
 }
 
 export interface IMoveTaskPayload {
-    status: ColumnId;
-    order: number;
+  status: ColumnId;
+  order: number;
 }
 
 export interface IUpdateTaskDetailPayload {
-    title?: string;
-    description?: string;
-    status?: ColumnId;
+  title?: string;
+  description?: string;
+  status?: ColumnId;
 }
 
 export interface IApiGetTasksSuccess {
-    status: "success";
-    data: {
-        tasks: IBackendTask[];
-    };
+  status: "success";
+  data: {
+    tasks: IBackendTask[];
+  };
 }
 
 export interface IApiTaskSuccess {
-    status: "success";
-    data: {
-        task: IBackendTask;
-    };
+  status: "success";
+  data: {
+    task: IBackendTask;
+  };
 }
 
 export interface IApiDeleteTaskSuccess {
-    status: "success";
-    message: string;
+  status: "success";
+  message: string;
 }

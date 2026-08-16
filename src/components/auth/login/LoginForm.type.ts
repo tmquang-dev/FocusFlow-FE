@@ -21,6 +21,6 @@
 // }
 
 export interface IResponseLogin {
-    message: string;
-    type: "success" | "warning" | "error";
+  message: string;
+  type: "success" | "warning" | "error";
 }

@@ -4,16 +4,16 @@ import Header from "./header/Header";
 import Footer from "./footer/Footer";
 
 function MainLayout() {
-    return (
-        <div>
-            <Toaster position="bottom-right" richColors />
-            <Header />
-            <main className="flex mt-10">
-                <Outlet />
-            </main>
-            <Footer />
-        </div>
-    );
+  return (
+    <div className="bg-background-main">
+      <Toaster position="bottom-right" richColors />
+      <Header />
+      <main className="flex mt-4 sm:mt-10">
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
+  );
 }
 
 export default MainLayout;

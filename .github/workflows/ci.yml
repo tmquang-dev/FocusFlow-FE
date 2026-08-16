@@ -2,9 +2,9 @@ name: CI (Code Quality & Build Verification)
 
 on:
   push:
-    branches: [ "main", "dev", "feat/ci" ]
+    branches: ["main", "dev", "feat/ci"]
   pull_request:
-    branches: [ "main", "dev" ]
+    branches: ["main", "dev"]
 
 jobs:
   verify:
@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci

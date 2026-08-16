@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap");
 @import "tailwindcss";
-*{
+* {
   font-family: "Inter", sans-serif;
 }
 
@@ -12,134 +12,133 @@
 
   /* Text Colors */
   --color-text-main: #111827;
-  --color-text-hover: #1F2937;
-  --color-text-active: #4B5563;
-  --color-text-secondary: #43474B;
-  --color-text-placeholder: #5A5F62;
-  --color-text-on-yellow: #FFFBEB;
-  --color-text-on-branch: #EDF1F5;
+  --color-text-hover: #1f2937;
+  --color-text-active: #4b5563;
+  --color-text-secondary: #43474b;
+  --color-text-placeholder: #5a5f62;
+  --color-text-on-yellow: #fffbeb;
+  --color-text-on-branch: #edf1f5;
 
   /* Background Colors */
-  --color-background-secondary-50: #EDF1F5;
+  --color-background-secondary-50: #edf1f5;
   --color-background-main: #e5e9f0;
-  --color-background-secondary-0: #FFFFFF;
-  --color-background-app: #EFF6FF;
+  --color-background-secondary-0: #ffffff;
+  --color-background-app: #eff6ff;
 
   /* Border Colors */
-  --color-border-hover: #6B7280;
-  --color-border: #9CA3AF;
+  --color-border-hover: #6b7280;
+  --color-border: #9ca3af;
 
   /* Brand & Custom Colors */
-  --color-white-custom: #FFFFFF;
+  --color-white-custom: #ffffff;
   --color-gray-900: #111827;
-  --color-gray-200: #E5E7EB;
-  --color-gray-100: #F3F4F6;
-  --color-gray-50: #F9FAFB;
+  --color-gray-200: #e5e7eb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-50: #f9fafb;
 
   /* Primary Scale */
   --color-primary-950: #172554;
-  --color-primary-900: #1E3A8A;
-  --color-primary-800: #1E40AF;
-  --color-primary-700: #1D4ED8;
-  --color-primary-600: #2563EB;
-  --color-primary-500: #3B82F6;
-  --color-primary-400: #60A5FA;
-  --color-primary-300: #93C5FD;
-  --color-primary-200: #BFDBFE;
-  --color-primary-100: #DBEAFE;
-  --color-primary-50: #EFF6FF;
+  --color-primary-900: #1e3a8a;
+  --color-primary-800: #1e40af;
+  --color-primary-700: #1d4ed8;
+  --color-primary-600: #2563eb;
+  --color-primary-500: #3b82f6;
+  --color-primary-400: #60a5fa;
+  --color-primary-300: #93c5fd;
+  --color-primary-200: #bfdbfe;
+  --color-primary-100: #dbeafe;
+  --color-primary-50: #eff6ff;
 
   /* Amber Scale */
-  --color-amber-900: #78350F;
-  --color-amber-800: #92400E;
-  --color-amber-700: #B45309;
-  --color-amber-600: #D97706;
-  --color-amber-500: #F59E0B;
-  --color-amber-400: #FBBF24;
-  --color-amber-300: #FDBA74;
-  --color-amber-200: #FDE68A;
-  --color-amber-100: #FEF3C7;
-  --color-amber-50: #FFFBEB;
+  --color-amber-900: #78350f;
+  --color-amber-800: #92400e;
+  --color-amber-700: #b45309;
+  --color-amber-600: #d97706;
+  --color-amber-500: #f59e0b;
+  --color-amber-400: #fbbf24;
+  --color-amber-300: #fdba74;
+  --color-amber-200: #fde68a;
+  --color-amber-100: #fef3c7;
+  --color-amber-50: #fffbeb;
 
   /* Green Scale */
-  --color-green-900: #14532D;
-  --color-green-600: #16A34A;
-  --color-green-400: #4ADE80;
-  --color-green-300: #86EFAC;
-  --color-green-200: #BBF7D0;
-  --color-green-100: #DCFCE7;
-  --color-green-50: #F0FDF4;
+  --color-green-900: #14532d;
+  --color-green-600: #16a34a;
+  --color-green-400: #4ade80;
+  --color-green-300: #86efac;
+  --color-green-200: #bbf7d0;
+  --color-green-100: #dcfce7;
+  --color-green-50: #f0fdf4;
 
   --shadow-custom-gray: -1px 2px 2px 0 var(--color-border);
 
   /* Kanban Scrollbar Colors */
-  --color-kanban-track: #EDF1F5;
-  --color-kanban-thumb: #9CA3AF;
-  --color-kanban-thumb-hover: #6B7280;
+  --color-kanban-track: #edf1f5;
+  --color-kanban-thumb: #9ca3af;
+  --color-kanban-thumb-hover: #6b7280;
 }
 
 @layer theme {
-
   .dark,
   .black,
   [data-theme="dark"],
   [data-theme="black"] {
-    --color-text-main: #F3F4F6;
-    --color-text-hover: #E5E7EB;
-    --color-text-active: #9CA3AF;
-    --color-text-secondary: #E5E7EB;
-    --color-text-placeholder: #9CA3AF;
-    --color-text-on-yellow: #451A03;
+    --color-text-main: #f3f4f6;
+    --color-text-hover: #e5e7eb;
+    --color-text-active: #9ca3af;
+    --color-text-secondary: #e5e7eb;
+    --color-text-placeholder: #9ca3af;
+    --color-text-on-yellow: #451a03;
     --color-text-on-branch: #030712;
 
-    --color-background-secondary-50: #1F2937;
+    --color-background-secondary-50: #1f2937;
     --color-background-main: #111827;
     --color-background-secondary-0: #000000;
     --color-background-app: #111827;
 
-    --color-border-hover: #6B7280;
-    --color-border: #4B5563;
+    --color-border-hover: #6b7280;
+    --color-border: #4b5563;
 
-    --color-kanban-track: #1F2937;
-    --color-kanban-thumb: #4B5563;
-    --color-kanban-thumb-hover: #6B7280;
+    --color-kanban-track: #1f2937;
+    --color-kanban-thumb: #4b5563;
+    --color-kanban-thumb-hover: #6b7280;
 
-    --color-white-custom: #FFFFFF;
-    --color-gray-900: #F3F4F6;
-    --color-gray-200: #1F2937;
+    --color-white-custom: #ffffff;
+    --color-gray-900: #f3f4f6;
+    --color-gray-200: #1f2937;
     --color-gray-100: #111827;
     --color-gray-50: #030712;
 
-    --color-primary-950: #EFF6FF;
-    --color-primary-900: #DBEAFE;
-    --color-primary-800: #BFDBFE;
-    --color-primary-700: #93C5FD;
-    --color-branch-600: #60A5FA;
-    --color-primary-500: #3B82F6;
-    --color-primary-400: #2563EB;
-    --color-primary-300: #1D4ED8;
-    --color-primary-200: #1E40AF;
-    --color-primary-100: #1E3A8A;
+    --color-primary-950: #eff6ff;
+    --color-primary-900: #dbeafe;
+    --color-primary-800: #bfdbfe;
+    --color-primary-700: #93c5fd;
+    --color-branch-600: #60a5fa;
+    --color-primary-500: #3b82f6;
+    --color-primary-400: #2563eb;
+    --color-primary-300: #1d4ed8;
+    --color-primary-200: #1e40af;
+    --color-primary-100: #1e3a8a;
     --color-primary-50: #172554;
 
-    --color-amber-900: #FEF3C7;
-    --color-amber-800: #FDE68A;
-    --color-amber-700: #FDBA74;
-    --color-amber-600: #FDBA74;
-    --color-amber-500: #F59E0B;
-    --color-amber-400: #D97706;
-    --color-amber-300: #D97706;
-    --color-amber-200: #FDE68A;
-    --color-amber-100: #78350F;
-    --color-amber-50: #451A03;
+    --color-amber-900: #fef3c7;
+    --color-amber-800: #fde68a;
+    --color-amber-700: #fdba74;
+    --color-amber-600: #fdba74;
+    --color-amber-500: #f59e0b;
+    --color-amber-400: #d97706;
+    --color-amber-300: #d97706;
+    --color-amber-200: #fde68a;
+    --color-amber-100: #78350f;
+    --color-amber-50: #451a03;
 
-    --color-green-900: #DCFCE7;
-    --color-green-600: #4ADE80;
-    --color-green-400: #16A34A;
-    --color-green-300: #16A34A;
+    --color-green-900: #dcfce7;
+    --color-green-600: #4ade80;
+    --color-green-400: #16a34a;
+    --color-green-300: #16a34a;
     --color-green-200: #166534;
-    --color-green-100: #14532D;
-    --color-green-50: #052E16;
+    --color-green-100: #14532d;
+    --color-green-50: #052e16;
   }
 }
 
@@ -150,14 +149,6 @@
 
   .font-text-small {
     @apply font-inter text-xs font-normal leading-4;
-  }
-
-  .font-text-h3-strikethrough {
-    @apply font-inter text-base font-medium leading-5 line-through;
-  }
-
-  .font-text-small-strikethrough {
-    @apply font-inter text-xs font-normal leading-4 line-through;
   }
 
   .font-text-default {
@@ -199,7 +190,6 @@
   .font-text-defaultmedium {
     @apply font-inter text-xs font-medium leading-4 uppercase;
   }
-
 }
 
 @layer utilities {
@@ -208,14 +198,24 @@
     width: 6px;
   }
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: var(--color-kanban-track, #EDF1F5);
+    background: var(--color-kanban-track, #edf1f5);
     border-radius: 9999px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: var(--color-kanban-thumb, #9CA3AF);
+    background: var(--color-kanban-thumb, #9ca3af);
     border-radius: 9999px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: var(--color-kanban-thumb-hover, #6B7280);
+    background: var(--color-kanban-thumb-hover, #6b7280);
+  }
+
+  /* Hide number input spinner arrows */
+  .hide-spinner::-webkit-outer-spin-button,
+  .hide-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .hide-spinner[type="number"] {
+    appearance: textfield;
   }
 }

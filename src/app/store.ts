@@ -4,18 +4,18 @@ import kanbanReducer from "@/components/kanban/kanbanSlice";
 import workspaceReducer from "@/components/workspace/workspaceSlice";
 
 const rootReducer = combineReducers({
-    profile: profileReducer,
-    kanban: kanbanReducer,
-    workspace: workspaceReducer,
+  profile: profileReducer,
+  kanban: kanbanReducer,
+  workspace: workspaceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
 
 export const setupStore = (preloadedState?: Partial<RootState>) => {
-    return configureStore({
-        reducer: rootReducer,
-        preloadedState,
-    });
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+  });
 };
 
 export const store = setupStore();
