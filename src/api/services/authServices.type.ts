@@ -28,10 +28,16 @@ export interface loginPayload {
   password: string;
 }
 
+export interface IGoogleLoginPayload {
+  auth_code: string;
+}
+
 export interface IApiLoginSuccess {
   status: "success";
   data: {
     user: IUser;
+    accessToken?: string;
+    refreshToken?: string;
   };
 }
 
