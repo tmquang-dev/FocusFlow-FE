@@ -32,6 +32,10 @@ export interface IGoogleLoginPayload {
   auth_code: string;
 }
 
+export interface IGithubLoginPayload {
+  auth_code: string;
+}
+
 export interface IApiLoginSuccess {
   status: "success";
   data: {
