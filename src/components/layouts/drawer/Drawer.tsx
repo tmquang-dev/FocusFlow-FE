@@ -165,18 +165,10 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
                       key={ws.id}
                       className="w-full flex items-center justify-between group"
                     >
-                      <Button
-                        variant="text"
-                        leftIcon={
-                          <CircleSmallIcon
-                            className={
-                              isActive
-                                ? "text-primary-600"
-                                : "text-text-placeholder"
-                            }
-                          />
-                        }
-                        className={`flex justify-start px-2.5 w-full py-2 gap-2 text-sm font-medium transition-colors rounded-lg ${
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        className={`flex items-center justify-start px-2.5 w-full py-2 gap-2 text-sm font-medium transition-colors rounded-lg cursor-pointer select-none ${
                           isActive
                             ? "bg-primary-100 text-primary-700 font-semibold"
                             : "text-text-main hover:bg-gray-100 active:bg-gray-200"
@@ -187,7 +179,19 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
                         onDoubleClick={() => {
                           setEditingWorkspaceId(ws.id);
                         }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            handleSelectWorkspace(ws.id);
+                          }
+                        }}
                       >
+                        <CircleSmallIcon
+                          className={
+                            isActive
+                              ? "text-primary-600 shrink-0"
+                              : "text-text-placeholder shrink-0"
+                          }
+                        />
                         {isEditing ? (
                           <InlineWorkspaceRenameInput
                             workspaceId={ws.id}
@@ -232,7 +236,7 @@ export default function Drawer({ isOpen, onClose }: DrawerProps) {
                             </button>
                           </div>
                         )}
-                      </Button>
+                      </div>
                     </li>
                   );
                 })}

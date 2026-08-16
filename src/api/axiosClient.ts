@@ -57,6 +57,7 @@ axiosClient.interceptors.response.use(
       const isAuthEndpoint =
         (originalRequest.url?.includes("/v1/auth/login") ?? false) ||
         (originalRequest.url?.includes("/v1/auth/google") ?? false) ||
+        (originalRequest.url?.includes("/v1/auth/github") ?? false) ||
         (originalRequest.url?.includes("/v1/auth/refresh-token") ?? false) ||
         (originalRequest.url?.includes("/v1/auth/register") ?? false) ||
         (originalRequest.url?.includes("/v1/auth/password") ?? false);

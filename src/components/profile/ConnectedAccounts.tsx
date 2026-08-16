@@ -1,6 +1,7 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { linkOAuthThunk, unlinkOAuthThunk } from "./profileThunks";
+import { openGithubOAuthPopup } from "@/utils/githubOAuth";
 import Button from "@/components/common/Button";
 import { GithubIcon, GoogleIcon } from "@/components/common/Icons";
 import { toast } from "sonner";
@@ -40,6 +41,26 @@ export function ConnectedAccounts() {
     flow: "auth-code",
   });
 
+  const handleLinkGithub = async () => {
+    try {
+      const code = await openGithubOAuthPopup();
+      await dispatch(
+        linkOAuthThunk({
+          provider: "github",
+          auth_code: code,
+        }),
+      ).unwrap();
+      toast.success("Đã liên kết tài khoản GitHub thành công!");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        const errorObj = err as { message?: string };
+        toast.error(errorObj.message ?? "Liên kết tài khoản GitHub thất bại");
+      }
+    }
+  };
+
   const handleUnlink = async (provider: "github" | "google") => {
     try {
       await dispatch(unlinkOAuthThunk({ provider })).unwrap();
@@ -50,10 +71,6 @@ export function ConnectedAccounts() {
       const errorObj = err as { message?: string };
       toast.error(errorObj.message ?? "Hủy liên kết tài khoản thất bại");
     }
-  };
-
-  const handleLinkGithub = () => {
-    toast.info("Vui lòng đăng nhập qua GitHub để hoàn tất liên kết.");
   };
 
   return (
@@ -95,7 +112,7 @@ export function ConnectedAccounts() {
               type="button"
               variant="outlined"
               onClick={() => {
-                handleLinkGithub();
+                void handleLinkGithub();
               }}
               className="text-xs font-medium text-text-main px-4 py-1.5 rounded-lg border-border"
             >
