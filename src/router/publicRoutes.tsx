@@ -12,6 +12,9 @@ const CreatePassword = lazy(
 const ForgotPassword = lazy(
   () => import("@/pages/auth/forgot-password/ForgotPassword.tsx"),
 );
+const GithubCallback = lazy(
+  () => import("@/pages/auth/github-callback/GithubCallback.tsx"),
+);
 
 const PageFallback = (
   <div className="min-h-screen w-full bg-background-main flex items-center justify-center">
@@ -59,6 +62,14 @@ export const publicRoutes: RouteObject = {
       element: (
         <Suspense fallback={PageFallback}>
           <ForgotPassword />
+        </Suspense>
+      ),
+    },
+    {
+      path: "oauth/github/callback",
+      element: (
+        <Suspense fallback={PageFallback}>
+          <GithubCallback />
         </Suspense>
       ),
     },
